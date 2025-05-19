@@ -1,30 +1,37 @@
-<template lang="pug">
-.qkb-bot-style(v-html="style", style="display: none")
+<template>
+  <div class="qkb-bot-style" v-html="style" style="display: none"></div>
 </template>
-<script>
-export default {
-  props: ['options'],
-  computed: {
-    style () {
-      if (!this.options) {
-        return ''
-      }
 
-      const {
-        colorScheme,
-        textColor,
-        boardContentBg,
-        bubbleBtnSize,
-        botAvatarImg,
-        botAvatarSize,
-        inputDisableBg,
-        msgBubbleBgBot,
-        msgBubbleColorBot,
-        msgBubbleBgUser,
-        msgBubbleColorUser
-      } = this.options
+<script setup>
+import { computed } from 'vue'
 
-      const styles = `
+const props = defineProps({
+  options: {
+    type: Object,
+    default: () => ({})
+  }
+})
+
+const style = computed(() => {
+  if (!props.options) {
+    return ''
+  }
+
+  const {
+    colorScheme,
+    textColor,
+    boardContentBg,
+    bubbleBtnSize,
+    botAvatarImg,
+    botAvatarSize,
+    inputDisableBg,
+    msgBubbleBgBot,
+    msgBubbleColorBot,
+    msgBubbleBgUser,
+    msgBubbleColorUser
+  } = props.options
+
+  const styles = `
 <style type="text/css" id="qkb-bot-style">
 .qkb-bubble-btn {
   background-color: ${colorScheme};
@@ -85,9 +92,7 @@ ${botAvatarImg
   background-color: ${inputDisableBg};
 }
 </style>
-      `
-      return styles
-    }
-  }
-}
+  `
+  return styles
+})
 </script>
