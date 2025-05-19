@@ -189,7 +189,6 @@ yarn build-bundle
 - [ ] Comprehensive testing suite
 
 ## Credits
-- Vue3 Migration from []
 - Icons from [FlatIcon](https://www.flaticon.com/)
 - Placeholder images from [Placehold.it](http://placehold.it)
 - Date formatting by [date-fns](https://date-fns.org/)
