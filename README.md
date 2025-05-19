@@ -189,12 +189,12 @@ yarn build-bundle
 - [ ] Comprehensive testing suite
 
 ## Credits
+- Originally forked from vue-bot-ui
 - Icons from [FlatIcon](https://www.flaticon.com/)
 - Placeholder images from [Placehold.it](http://placehold.it)
 - Date formatting by [date-fns](https://date-fns.org/)
 
 ## Contributors
-
 - Danilo Urrutia ([@compdani](https://github.com/@compdani))
 - Hoang Son Nguyen ([@juzser](https://github.com/juzser))
 - Aleksey Morshnev ([@enorenio](https://github.com/enorenio))
