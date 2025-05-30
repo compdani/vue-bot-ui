@@ -31,8 +31,10 @@
           :input-disable="inputDisable"
           :input-placeholder="optionsMain.inputPlaceholder"
           :input-disable-placeholder="optionsMain.inputDisablePlaceholder"
+          :input-disable-button-placeholder="optionsMain.inputDisableButtonPlaceholder"
           :input-disable-bg="optionsMain.inputDisableBg"
           :msg-bubble-bg-user="optionsMain.msgBubbleBgUser"
+          :last-message-type="lastMessageType"
           @msg-send="sendMessage"
         >
           <template #actions>
@@ -124,7 +126,8 @@ const defaultOptions = {
   msgBubbleColorUser: '#fff',
   inputPlaceholder: 'Message',
   inputDisableBg: '#fff',
-  inputDisablePlaceholder: null,
+  inputDisablePlaceholder: 'Please wait for bot response',
+  inputDisableButtonPlaceholder: null,
   bubbleZIndex: 9998,
   bubblePosition: {
     bottom: '20px',
@@ -149,6 +152,14 @@ const uiClasses = computed(() => {
     classes.push('qkb-bot-ui--animate')
   }
   return classes
+})
+
+const lastMessageType = computed(() => {
+  if (!props.messages || props.messages.length === 0) {
+    return null
+  }
+  const lastMessage = props.messages[props.messages.length - 1]
+  return lastMessage.type || null
 })
 
 const botOpen = () => {

@@ -11,12 +11,13 @@ A highly customizable chatbot UI component for Vue.js applications.
 - 🎨 Fully customizable UI (colors, sizes, animations)
 - 💬 Multiple message types support (text, buttons)
 - 🔌 Easy integration with any bot API
-- ⚡ Event-driven architecture
+- ⚡ Event-driven architecture with event bus
 - 🎯 Slot system for custom components
 - 🎯 Responsive design
 - ⌨️ Smart keyboard controls (Shift+Enter to send, Enter for new lines)
 - 🔄 Auto-resizing text input
 - 💻 TypeScript support
+- 🔗 URL buttons with automatic link handling
 
 ## Installation
 
@@ -50,6 +51,7 @@ export default {
     :messages="messages"
     :options="botOptions"
     @msg-send="handleMessageSend"
+    @button-clicked="handleButtonClick"
   />
 </template>
 
@@ -81,8 +83,22 @@ export default {
   },
   methods: {
     handleMessageSend(message) {
-      // Handle the sent message
+      // Handle text messages
       console.log('Message sent:', message)
+    },
+    handleButtonClick(buttonData) {
+      // Handle button clicks
+      console.log('Button clicked:', buttonData)
+      
+      // Add user selection to chat
+      this.messages.push({
+        agent: 'user',
+        type: 'text',
+        text: buttonData.text
+      })
+      
+      // Process the button action
+      this.processButtonAction(buttonData)
     }
   }
 }
@@ -91,7 +107,7 @@ export default {
 
 ## Button Message Implementation Example
 
-Here's a complete example showing how to implement button messages with onClick functions defined in the message data:
+Here's a complete example showing how to implement button messages with the new event bus system:
 
 ```vue
 <template>
@@ -100,6 +116,7 @@ Here's a complete example showing how to implement button messages with onClick 
     :options="botOptions"
     :bot-typing="isTyping"
     @msg-send="handleMessageSend"
+    @button-clicked="handleButtonClick"
   />
 </template>
 
@@ -140,6 +157,22 @@ export default {
       this.processUserInput(message.text)
     },
 
+    // Handle button clicks through event bus
+    handleButtonClick(buttonData) {
+      console.log('Button clicked:', buttonData)
+      
+      // Add user's selection to chat
+      this.messages.push({
+        agent: 'user',
+        type: 'text',
+        text: buttonData.text,
+        disableInput: false
+      })
+      
+      // Process the button action
+      this.processUserInput(buttonData.value)
+    },
+
     processUserInput(input) {
       // Show typing indicator
       this.isTyping = true
@@ -168,27 +201,12 @@ export default {
       }
     },
 
-    // Bot response methods with onClick functions in message data
+    // Bot response methods using the new action-based button system
     sendMainMenu() {
       this.addBotMessage({
         type: 'button',
         text: 'I can help you with several things. Please choose an option:',
         disableInput: true,
-        onClick: (option) => {
-          // Handle button click for this specific message
-          console.log('Main menu option selected:', option)
-          
-          // Add user's selection to chat
-          this.messages.push({
-            agent: 'user',
-            type: 'text',
-            text: option.text,
-            disableInput: false
-          })
-          
-          // Process the selection
-          this.processUserInput(option.value)
-        },
         options: [
           {
             text: '🔧 Technical Support',
@@ -219,24 +237,6 @@ export default {
         type: 'button',
         text: 'What kind of technical issue are you experiencing?',
         disableInput: true,
-        onClick: (option) => {
-          // Custom handling for technical support menu
-          console.log('Technical support option selected:', option)
-          
-          // Log analytics for technical issues
-          this.logAnalytics('technical_support_selection', option.value)
-          
-          // Add user's selection to chat
-          this.messages.push({
-            agent: 'user',
-            type: 'text',
-            text: option.text,
-            disableInput: false
-          })
-          
-          // Process the selection
-          this.processUserInput(option.value)
-        },
         options: [
           {
             text: '🚫 Login Problems',
@@ -275,28 +275,6 @@ export default {
           type: 'button',
           text: 'How urgent is your billing issue?',
           disableInput: true,
-          onClick: (option) => {
-            // Custom handling for billing priority
-            console.log('Billing priority selected:', option)
-            
-            // Call external billing API with priority
-            this.callBillingAPI(option.value)
-            
-            // Add user's selection to chat
-            this.messages.push({
-              agent: 'user',
-              type: 'text',
-              text: option.text,
-              disableInput: false
-            })
-            
-            // Show confirmation message
-            this.addBotMessage({
-              type: 'text',
-              text: `Got it! I've escalated your ${option.value} priority billing issue to our specialist team.`,
-              disableInput: false
-            })
-          },
           options: [
             {
               text: '🔴 High Priority',
@@ -342,16 +320,6 @@ export default {
         type: 'button',
         text: 'I\'m not sure I understand. Here are some things I can help you with:',
         disableInput: true,
-        onClick: (option) => {
-          // Default fallback handling
-          this.messages.push({
-            agent: 'user',
-            type: 'text',
-            text: option.text,
-            disableInput: false
-          })
-          this.processUserInput(option.value)
-        },
         options: [
           {
             text: '❓ Get Help',
@@ -438,7 +406,6 @@ This behavior matches modern chat applications and allows for both single-line q
 | `input-disable` | Boolean | `false` | Disables message input when true |
 | `is-open` | Boolean | `false` | Opens the board on initialization when true |
 | `open-delay` | Number | `undefined` | Delay (ms) before opening. Requires `is-open: true` |
-| `:onButtonClick` | Function | - | Called when a button is clicked with the button option object |
 
 ## UI Customization Options
 
@@ -458,7 +425,8 @@ This behavior matches modern chat applications and allows for both single-line q
 | `msgBubbleColorUser` | String | '#fff' | User message text color |
 | `inputPlaceholder` | String | 'Type here...' | Input placeholder text |
 | `inputDisableBg` | String | '#fff' | Disabled input background |
-| `inputDisablePlaceholder` | String | 'Hit the buttons above to respond' | Disabled input placeholder |
+| `inputDisablePlaceholder` | String | 'Please wait for bot response' | Disabled input placeholder (general) |
+| `inputDisableButtonPlaceholder` | String | 'Please select an option above' | Disabled input placeholder for button messages |
 | `bubbleZIndex` | Number | 9999 | Z-index for the chat bubble |
 | `bubblePosition` | Object | `{bottom: '20px', right: '20px', top: null, left: null}` | Position of the chat bubble |
 | `windowZIndex` | Number | 9999 | Z-index for the entire chat window |
@@ -514,22 +482,82 @@ bubbleZIndex: 10001
   type: 'button',
   text: 'Please select an option:',
   disableInput: true,
-  onClick: (option) => {
-    // Handle button click
-    console.log('Selected:', option)
-  },
   options: [
     {
-      text: 'Open Google',
-      value: 'https://google.com',
-      action: 'url'
+      text: 'Open Documentation',
+      value: 'https://example.com/docs',
+      action: 'url' // Opens link directly, no event fired
     },
     {
-      text: 'Submit Ticket',
-      value: 'submit_ticket',
-      action: 'postback'
+      text: 'Contact Support',
+      value: 'contact_support',
+      action: 'postback' // Fires button-clicked event
+    },
+    {
+      text: 'Get Help',
+      value: 'help_menu',
+      action: 'postback' // Fires button-clicked event
     }
   ]
+}
+```
+
+**Button Action Types:**
+- `url`: Opens the URL in a new tab. No `button-clicked` event is fired.
+- `postback`: Emits `button-clicked` event with button data for your application to handle.
+
+## Event Bus Architecture
+
+Vue Bot UI uses an internal event bus to handle button clicks efficiently across the component hierarchy. This ensures that button click handlers work correctly in both development and production builds.
+
+### How It Works
+
+1. **Button Click**: User clicks a button in the `ButtonOptions` component
+2. **Event Emission**: The component emits a `button-clicked` event through the internal event bus
+3. **Event Bubbling**: The `BotUI` component listens to the event bus and re-emits the event to its parent
+4. **Parent Handling**: Your parent component receives the `@button-clicked` event and processes the action
+
+### Benefits
+
+- ✅ **Context Preservation**: No loss of scope or binding issues
+- ✅ **Production Ready**: Works reliably in compiled/minified builds  
+- ✅ **Clean Architecture**: Clear separation between UI and business logic
+- ✅ **URL Handling**: Direct link buttons work automatically
+- ✅ **Event-Driven**: Follows Vue.js best practices for component communication
+
+### Migration from onClick
+
+If you're upgrading from a version that used `onClick` handlers in button options:
+
+**Before (deprecated):**
+```javascript
+options: [
+  {
+    text: 'Submit',
+    value: 'submit',
+    onClick: (option) => {
+      console.log('clicked:', option)
+    }
+  }
+]
+```
+
+**After (recommended):**
+```javascript
+// In your message data
+options: [
+  {
+    text: 'Submit',
+    value: 'submit',
+    action: 'postback'
+  }
+]
+
+// In your parent component
+methods: {
+  handleButtonClick(buttonData) {
+    console.log('clicked:', buttonData)
+  }
 }
 ```
 
@@ -538,8 +566,26 @@ bubbleZIndex: 10001
 | Event | Parameters | Description |
 |-------|------------|-------------|
 | `init` | - | Fired when board opens |
-| `msg-send` | `value` (Object) | Fired on message send/option select |
+| `msg-send` | `value` (Object) | Fired on text message send |
+| `button-clicked` | `buttonData` (Object) | Fired when a button is clicked |
 | `destroy` | - | Fired when board closes |
+
+### Button Click Event Data
+
+The `button-clicked` event provides the following data structure:
+
+```javascript
+{
+  action: 'postback', // or 'url'
+  value: 'button_value',
+  text: 'Button Text',
+  originalItem: { /* original button option object */ }
+}
+```
+
+**Action Types:**
+- `postback`: Button that should trigger application logic
+- `url`: Button that opens a link (handled automatically, no event fired)
 
 ### Trigger Events
 - `botui-open`: Opens the board

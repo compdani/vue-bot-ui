@@ -69,7 +69,6 @@ const handleButtonClick = (item) => {
     action: item.action || 'click',
     value: item.value,
     text: item.text,
-    originalItem: item
   })
 }
 

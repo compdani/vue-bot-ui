@@ -59,7 +59,8 @@ const botOptions = {
   msgBubbleBgBot: '#fff',
   inputPlaceholder: 'Type your message... (Enter to send, Ctrl+Enter for new line)',
   inputDisableBg: '#fff',
-  inputDisablePlaceholder: 'Hit the buttons above to respond'
+  inputDisablePlaceholder: 'Bot is typing, please wait...',
+  inputDisableButtonPlaceholder: 'Please select one of the options above'
 }
 
 const botStart = () => {

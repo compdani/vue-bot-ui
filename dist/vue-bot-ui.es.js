@@ -1,14 +1,14 @@
-import { useCssVars as g, createElementBlock as u, openBlock as s, renderSlot as d, createElementVNode as i, toDisplayString as h, ref as k, Fragment as U, renderList as I, normalizeClass as w, computed as x, createCommentVNode as y, createBlock as C, resolveDynamicComponent as S, createStaticVNode as z, watch as A, nextTick as E, createVNode as p, onMounted as M, withDirectives as P, vModelText as O, unref as D, Transition as T, withCtx as B } from "vue";
-const $ = {
+import { useCssVars as g, createElementBlock as i, openBlock as l, renderSlot as d, createElementVNode as r, toDisplayString as h, ref as k, Fragment as A, renderList as E, normalizeClass as $, computed as _, createCommentVNode as y, createBlock as C, resolveDynamicComponent as w, createStaticVNode as O, watch as M, nextTick as z, createVNode as B, onMounted as P, withDirectives as N, vModelText as L, unref as D, onUnmounted as V, Transition as T, withCtx as p } from "vue";
+const U = {
   EVENT_OPEN: "botui-open",
   EVENT_CLOSE: "botui-close",
   EVENT_TOGGLE: "botui-toggle"
-}, m = (e, o) => {
-  const l = e.__vccOpts || e;
-  for (const [r, n] of o)
-    l[r] = n;
-  return l;
-}, N = { class: "qkb-board-header" }, L = { class: "qkb-board-header__title" }, V = {
+}, m = (e, t) => {
+  const s = e.__vccOpts || e;
+  for (const [a, b] of t)
+    s[a] = b;
+  return s;
+}, H = { class: "qkb-board-header" }, j = { class: "qkb-board-header__title" }, G = {
   __name: "Header",
   props: {
     botTitle: {
@@ -25,16 +25,16 @@ const $ = {
     }
   },
   setup(e) {
-    return g((o) => ({
+    return g((t) => ({
       "899703c0": e.colorScheme,
       "989fc124": e.textColor
-    })), (o, l) => (s(), u("div", N, [
-      d(o.$slots, "header", {}, () => [
-        i("div", L, h(e.botTitle), 1)
+    })), (t, s) => (l(), i("div", H, [
+      d(t.$slots, "header", {}, () => [
+        r("div", j, h(e.botTitle), 1)
       ], !0)
     ]));
   }
-}, H = /* @__PURE__ */ m(V, [["__scopeId", "data-v-d4de3b4f"]]), j = { class: "qkb-msg-bubble-component qkb-msg-bubble-component--single-text" }, G = { class: "qkb-msg-bubble-component__text" }, Z = {
+}, Z = /* @__PURE__ */ m(G, [["__scopeId", "data-v-d4de3b4f"]]), K = { class: "qkb-msg-bubble-component qkb-msg-bubble-component--single-text" }, F = { class: "qkb-msg-bubble-component__text" }, J = {
   __name: "SingleText",
   props: {
     mainData: {
@@ -63,14 +63,31 @@ const $ = {
     }
   },
   setup(e) {
-    return g((o) => ({
+    return g((t) => ({
       bb7eabf4: e.isUserMessage ? e.msgBubbleBgUser : e.msgBubbleBgBot,
       "448759d8": e.isUserMessage ? e.msgBubbleColorUser : e.msgBubbleColorBot
-    })), (o, l) => (s(), u("div", j, [
-      i("div", G, h(e.mainData.text), 1)
+    })), (t, s) => (l(), i("div", K, [
+      r("div", F, h(e.mainData.text), 1)
     ]));
   }
-}, K = /* @__PURE__ */ m(Z, [["__scopeId", "data-v-e044f48b"]]), F = { class: "qkb-msg-bubble-component qkb-msg-bubble-component--button-options" }, J = { class: "qkb-msg-bubble-component__text" }, Q = { class: "qkb-msg-bubble-component__options-wrapper" }, R = ["onClick"], W = ["href"], X = {
+}, Q = /* @__PURE__ */ m(J, [["__scopeId", "data-v-e044f48b"]]);
+function R(e) {
+  return { all: e = e || /* @__PURE__ */ new Map(), on: function(t, s) {
+    var a = e.get(t);
+    a ? a.push(s) : e.set(t, [s]);
+  }, off: function(t, s) {
+    var a = e.get(t);
+    a && (s ? a.splice(a.indexOf(s) >>> 0, 1) : e.set(t, []));
+  }, emit: function(t, s) {
+    var a = e.get(t);
+    a && a.slice().map(function(b) {
+      b(s);
+    }), (a = e.get("*")) && a.slice().map(function(b) {
+      b(t, s);
+    });
+  } };
+}
+const I = R(), W = { class: "qkb-msg-bubble-component qkb-msg-bubble-component--button-options" }, X = { class: "qkb-msg-bubble-component__text" }, Y = { class: "qkb-msg-bubble-component__options-wrapper" }, ee = ["onClick"], te = ["href"], oe = {
   __name: "ButtonOptions",
   props: {
     mainData: {
@@ -99,45 +116,52 @@ const $ = {
     }
   },
   setup(e) {
-    g((r) => ({
-      "6a9bd88a": e.msgBubbleBgBot,
-      "3fc4bc4b": e.msgBubbleColorBot,
-      e8cdd752: e.msgBubbleBgUser,
-      "8e490472": e.msgBubbleColorUser
+    g((a) => ({
+      74142707: e.msgBubbleBgBot,
+      e82f5502: e.msgBubbleColorBot,
+      "0e796a8b": e.msgBubbleBgUser,
+      "1da9e9da": e.msgBubbleColorUser
     }));
-    const o = k(null), l = (r) => !!(typeof r == "object" && r.onClick);
-    return (r, n) => (s(), u("div", F, [
-      i("div", J, h(e.mainData.text), 1),
-      i("div", Q, [
-        (s(!0), u(U, null, I(e.mainData.options, (a, t) => (s(), u("div", {
-          key: t,
-          class: w([{ active: o.value === a.value }, "qkb-mb-button-options__item"])
+    const t = k(null), s = (a) => {
+      t.value = a.value, I.emit("button-clicked", {
+        action: a.action || "click",
+        value: a.value,
+        text: a.text,
+        originalItem: a
+      });
+    };
+    return (a, b) => (l(), i("div", W, [
+      r("div", X, h(e.mainData.text), 1),
+      r("div", Y, [
+        (l(!0), i(A, null, E(e.mainData.options, (n, o) => (l(), i("div", {
+          key: o,
+          class: $([{ active: t.value === n.value }, "qkb-mb-button-options__item"])
         }, [
-          l(a) ? (s(), u("button", {
+          n.action !== "url" ? (l(), i("button", {
             key: 0,
             class: "qkb-mb-button-options__btn",
-            onClick: (f) => a.onClick(a.value)
+            onClick: (f) => s(n)
           }, [
-            i("span", null, h(a.text), 1)
-          ], 8, R)) : (s(), u("a", {
+            r("span", null, h(n.text), 1)
+          ], 8, ee)) : (l(), i("a", {
             key: 1,
-            href: a.value,
+            href: n.value,
             target: "_blank",
             class: "qkb-mb-button-options__btn qkb-mb-button-options__url"
           }, [
-            i("span", null, h(a.text), 1)
-          ], 8, W))
+            r("span", null, h(n.text), 1)
+          ], 8, te))
         ], 2))), 128))
       ])
     ]));
   }
-}, Y = /* @__PURE__ */ m(X, [["__scopeId", "data-v-dd76e5ab"]]), ee = {
+}, ae = /* @__PURE__ */ m(oe, [["__scopeId", "data-v-0341e4d1"]]), se = {
   key: 0,
   class: "qkb-msg-avatar"
-}, te = {
+}, be = {
   key: 2,
   class: "qkb-msg-bubble__time"
-}, oe = {
+}, le = {
   __name: "Main",
   props: {
     message: {
@@ -170,27 +194,27 @@ const $ = {
     }
   },
   setup(e) {
-    g((n) => ({
+    g((b) => ({
       "4aaf0702": e.botAvatarSize + "px",
       "4fa00e38": "url(" + e.botAvatarImg + ")"
     }));
-    const o = e, l = x(
-      () => o.message.agent === "bot" ? "qkb-msg-bubble--bot" : "qkb-msg-bubble--user"
-    ), r = x(() => {
-      switch (o.message.type) {
+    const t = e, s = _(
+      () => t.message.agent === "bot" ? "qkb-msg-bubble--bot" : "qkb-msg-bubble--user"
+    ), a = _(() => {
+      switch (t.message.type) {
         case "button":
-          return Y;
+          return ae;
         default:
-          return K;
+          return Q;
       }
     });
-    return (n, a) => (s(), u("div", {
-      class: w(["qkb-msg-bubble", l.value])
+    return (b, n) => (l(), i("div", {
+      class: $(["qkb-msg-bubble", s.value])
     }, [
-      e.message.agent === "bot" ? (s(), u("div", ee, a[0] || (a[0] = [
-        i("div", { class: "qkb-msg-avatar__img" }, " ", -1)
+      e.message.agent === "bot" ? (l(), i("div", se, n[0] || (n[0] = [
+        r("div", { class: "qkb-msg-avatar__img" }, " ", -1)
       ]))) : y("", !0),
-      r.value ? (s(), C(S(r.value), {
+      a.value ? (l(), C(w(a.value), {
         key: 1,
         "main-data": e.message,
         "msg-bubble-bg-bot": e.msgBubbleBgBot,
@@ -199,10 +223,10 @@ const $ = {
         "msg-bubble-color-user": e.msgBubbleColorUser,
         "is-user-message": e.message.agent === "user"
       }, null, 8, ["main-data", "msg-bubble-bg-bot", "msg-bubble-color-bot", "msg-bubble-bg-user", "msg-bubble-color-user", "is-user-message"])) : y("", !0),
-      e.message.createdAt ? (s(), u("div", te, h(e.message.createdAt), 1)) : y("", !0)
+      e.message.createdAt ? (l(), i("div", be, h(e.message.createdAt), 1)) : y("", !0)
     ], 2));
   }
-}, se = /* @__PURE__ */ m(oe, [["__scopeId", "data-v-9c39555b"]]), ae = { class: "qkb-msg-bubble qkb-msg-bubble--bot" }, be = {
+}, ne = /* @__PURE__ */ m(le, [["__scopeId", "data-v-9c39555b"]]), ue = { class: "qkb-msg-bubble qkb-msg-bubble--bot" }, ie = {
   __name: "Typing",
   props: {
     botAvatarSize: {
@@ -223,19 +247,19 @@ const $ = {
     }
   },
   setup(e) {
-    return g((o) => ({
+    return g((t) => ({
       "4d54dd48": e.botAvatarSize + "px",
       "4ca3d3fb": "url(" + e.botAvatarImg + ")",
       "5040f4b1": e.msgBubbleBgBot,
       e48ca0d6: e.msgBubbleColorBot
-    })), (o, l) => (s(), u("div", ae, l[0] || (l[0] = [
-      z('<div class="qkb-msg-avatar" data-v-e819e473><div class="qkb-msg-avatar__img" data-v-e819e473> </div></div><div class="qkb-msg-bubble-component qkb-msg-bubble-component--typing" data-v-e819e473><div class="qkb-msg-bubble-component__text" data-v-e819e473><div class="qkb-msg-bubble__typing-indicator" data-v-e819e473><span data-v-e819e473></span><span data-v-e819e473></span><span data-v-e819e473></span></div></div></div>', 2)
+    })), (t, s) => (l(), i("div", ue, s[0] || (s[0] = [
+      O('<div class="qkb-msg-avatar" data-v-e819e473><div class="qkb-msg-avatar__img" data-v-e819e473> </div></div><div class="qkb-msg-bubble-component qkb-msg-bubble-component--typing" data-v-e819e473><div class="qkb-msg-bubble-component__text" data-v-e819e473><div class="qkb-msg-bubble__typing-indicator" data-v-e819e473><span data-v-e819e473></span><span data-v-e819e473></span><span data-v-e819e473></span></div></div></div>', 2)
     ])));
   }
-}, le = /* @__PURE__ */ m(be, [["__scopeId", "data-v-e819e473"]]), ne = {
+}, re = /* @__PURE__ */ m(ie, [["__scopeId", "data-v-e819e473"]]), ce = {
   key: 0,
   class: "qkb-board-content__bot-typing"
-}, ue = {
+}, de = {
   __name: "Content",
   props: {
     mainData: {
@@ -276,28 +300,28 @@ const $ = {
     }
   },
   setup(e) {
-    g((a) => ({
+    g((n) => ({
       ba1b7fe8: e.boardContentBg
     }));
-    const o = e, l = k(null), r = k(null), n = () => {
-      const a = l.value, t = r.value.offsetHeight;
-      a.scrollTop = t;
+    const t = e, s = k(null), a = k(null), b = () => {
+      const n = s.value, o = a.value.offsetHeight;
+      n.scrollTop = o;
     };
-    return A(() => o.mainData, () => {
-      E(() => {
-        n();
+    return M(() => t.mainData, () => {
+      z(() => {
+        b();
       });
-    }), (a, t) => (s(), u("div", {
+    }), (n, o) => (l(), i("div", {
       class: "qkb-board-content",
       ref_key: "boardContent",
-      ref: l
+      ref: s
     }, [
-      i("div", {
+      r("div", {
         class: "qkb-board-content__bubbles",
         ref_key: "boardBubbles",
-        ref: r
+        ref: a
       }, [
-        (s(!0), u(U, null, I(e.mainData, (f, v) => (s(), C(se, {
+        (l(!0), i(A, null, E(e.mainData, (f, v) => (l(), C(ne, {
           key: v,
           message: f,
           "bot-avatar-size": e.botAvatarSize,
@@ -307,9 +331,9 @@ const $ = {
           "msg-bubble-bg-user": e.msgBubbleBgUser,
           "msg-bubble-color-user": e.msgBubbleColorUser
         }, null, 8, ["message", "bot-avatar-size", "bot-avatar-img", "msg-bubble-bg-bot", "msg-bubble-color-bot", "msg-bubble-bg-user", "msg-bubble-color-user"]))), 128)),
-        e.botTyping ? (s(), u("div", ne, [
-          d(a.$slots, "botTyping", {}, () => [
-            p(le, {
+        e.botTyping ? (l(), i("div", ce, [
+          d(n.$slots, "botTyping", {}, () => [
+            B(re, {
               "bot-avatar-size": e.botAvatarSize,
               "bot-avatar-img": e.botAvatarImg,
               "msg-bubble-bg-bot": e.msgBubbleBgBot,
@@ -320,17 +344,17 @@ const $ = {
       ], 512)
     ], 512));
   }
-}, ie = /* @__PURE__ */ m(ue, [["__scopeId", "data-v-946dc6df"]]), re = {
+}, ge = /* @__PURE__ */ m(de, [["__scopeId", "data-v-946dc6df"]]), me = {
   xmlns: "http://www.w3.org/2000/svg",
   "xml:space": "preserve",
   viewBox: "0 0 488.721 488.721"
 };
-function ce(e, o) {
-  return s(), u("svg", re, o[0] || (o[0] = [
-    i("path", { d: "M483.589 222.024a51.2 51.2 0 0 0-23.762-23.762L73.522 11.331C48.074-.998 17.451 9.638 5.122 35.086A51.2 51.2 0 0 0 3.669 76.44l67.174 167.902L3.669 412.261c-10.463 26.341 2.409 56.177 28.75 66.639a51.3 51.3 0 0 0 18.712 3.624c7.754 0 15.408-1.75 22.391-5.12l386.304-186.982c25.45-12.326 36.089-42.949 23.763-68.398M58.657 446.633c-8.484 4.107-18.691.559-22.798-7.925a17.07 17.07 0 0 1-.481-13.784l65.399-163.516h340.668zm42.121-219.358L35.379 63.759a16.64 16.64 0 0 1 4.215-18.773 16.54 16.54 0 0 1 19.063-2.884l382.788 185.173z" }, null, -1)
+function fe(e, t) {
+  return l(), i("svg", me, t[0] || (t[0] = [
+    r("path", { d: "M483.589 222.024a51.2 51.2 0 0 0-23.762-23.762L73.522 11.331C48.074-.998 17.451 9.638 5.122 35.086A51.2 51.2 0 0 0 3.669 76.44l67.174 167.902L3.669 412.261c-10.463 26.341 2.409 56.177 28.75 66.639a51.3 51.3 0 0 0 18.712 3.624c7.754 0 15.408-1.75 22.391-5.12l386.304-186.982c25.45-12.326 36.089-42.949 23.763-68.398M58.657 446.633c-8.484 4.107-18.691.559-22.798-7.925a17.07 17.07 0 0 1-.481-13.784l65.399-163.516h340.668zm42.121-219.358L35.379 63.759a16.64 16.64 0 0 1 4.215-18.773 16.54 16.54 0 0 1 19.063-2.884l382.788 185.173z" }, null, -1)
   ]));
 }
-const de = { render: ce }, ge = { class: "qkb-board-action__wrapper" }, me = { class: "qkb-board-action__msg-box" }, fe = ["disabled", "placeholder"], ve = { class: "qkb-board-action__extra" }, Be = ["disabled"], pe = {
+const ve = { render: fe }, pe = { class: "qkb-board-action__wrapper" }, Be = { class: "qkb-board-action__msg-box" }, he = ["disabled", "placeholder"], ye = { class: "qkb-board-action__extra" }, ke = ["disabled"], xe = {
   __name: "Action",
   props: {
     inputPlaceholder: {
@@ -355,98 +379,98 @@ const de = { render: ce }, ge = { class: "qkb-board-action__wrapper" }, me = { c
     }
   },
   emits: ["msg-send"],
-  setup(e, { emit: o }) {
-    g((b) => ({
+  setup(e, { emit: t }) {
+    g((u) => ({
       dd375256: e.inputDisableBg,
       "6e13778b": e.msgBubbleBgUser
     }));
-    const l = e, r = o, n = k(null), a = k(null), t = x(() => {
-      const b = [];
-      return l.inputDisable && b.push("qkb-board-action--disabled"), n.value && b.push("qkb-board-action--typing"), b;
+    const s = e, a = t, b = k(null), n = k(null), o = _(() => {
+      const u = [];
+      return s.inputDisable && u.push("qkb-board-action--disabled"), b.value && u.push("qkb-board-action--typing"), u;
     });
-    M(() => {
-      var b;
-      l.inputDisable || (b = a.value) == null || b.focus(), _();
+    P(() => {
+      var u;
+      s.inputDisable || (u = n.value) == null || u.focus(), x();
     });
     const f = () => {
-      var b;
-      n.value && !l.inputDisable && (r("msg-send", { text: n.value }), n.value = null, (b = a.value) == null || b.focus());
-    }, v = (b) => {
-      if (b.key === "Enter")
-        if (b.shiftKey)
-          b.preventDefault(), f();
+      var u;
+      b.value && !s.inputDisable && (a("msg-send", { text: b.value }), b.value = null, (u = n.value) == null || u.focus());
+    }, v = (u) => {
+      if (u.key === "Enter")
+        if (u.shiftKey)
+          u.preventDefault(), f();
         else
           return;
-    }, _ = () => {
-      a.value && (a.value.style.height = "auto", a.value.style.height = a.value.scrollHeight + "px");
+    }, x = () => {
+      n.value && (n.value.style.height = "auto", n.value.style.height = n.value.scrollHeight + "px");
     };
-    return A(n, () => {
-      E(() => {
-        _();
+    return M(b, () => {
+      z(() => {
+        x();
       });
-    }), (b, q) => (s(), u("div", {
-      class: w(["qkb-board-action", t.value])
+    }), (u, q) => (l(), i("div", {
+      class: $(["qkb-board-action", o.value])
     }, [
-      i("div", ge, [
-        i("div", me, [
-          P(i("textarea", {
+      r("div", pe, [
+        r("div", Be, [
+          N(r("textarea", {
             ref_key: "qkbMessageInput",
-            ref: a,
-            "onUpdate:modelValue": q[0] || (q[0] = (c) => n.value = c),
+            ref: n,
+            "onUpdate:modelValue": q[0] || (q[0] = (S) => b.value = S),
             class: "qkb-board-action__input",
             disabled: e.inputDisable,
             placeholder: e.inputDisablePlaceholder && e.inputDisable ? e.inputDisablePlaceholder : e.inputPlaceholder,
             onKeydown: v,
-            onInput: _,
+            onInput: x,
             rows: "1"
-          }, null, 40, fe), [
-            [O, n.value]
+          }, null, 40, he), [
+            [L, b.value]
           ])
         ]),
-        i("div", ve, [
-          d(b.$slots, "actions", {}, void 0, !0),
-          i("button", {
+        r("div", ye, [
+          d(u.$slots, "actions", {}, void 0, !0),
+          r("button", {
             class: "qkb-action-item qkb-action-item--send",
             onClick: f,
-            disabled: !n.value || e.inputDisable
+            disabled: !b.value || e.inputDisable
           }, [
-            d(b.$slots, "sendButton", {}, () => [
-              (s(), C(S(D(de)), { class: "qkb-action-icon qkb-action-icon--send" }))
+            d(u.$slots, "sendButton", {}, () => [
+              (l(), C(w(D(ve)), { class: "qkb-action-icon qkb-action-icon--send" }))
             ], !0)
-          ], 8, Be)
+          ], 8, ke)
         ])
       ])
     ], 2));
   }
-}, he = /* @__PURE__ */ m(pe, [["__scopeId", "data-v-f2b47962"]]), ye = {
+}, _e = /* @__PURE__ */ m(xe, [["__scopeId", "data-v-f2b47962"]]), Ce = {
   xmlns: "http://www.w3.org/2000/svg",
   width: "511pt",
   height: "511pt",
   viewBox: "1 -31 512 511"
 };
-function ke(e, o) {
-  return s(), u("svg", ye, o[0] || (o[0] = [
-    i("path", { d: "M128 448.5c-8.836 0-16-7.164-16-16v-80H48c-26.512 0-48-21.492-48-48v-256C0 21.988 21.488.5 48 .5h416c26.512 0 48 21.488 48 48v256c0 26.508-21.488 48-48 48H230.625l-91.312 91.313c-3 3-7.07 4.687-11.313 4.687m-80-416c-8.836 0-16 7.164-16 16v256c0 8.836 7.164 16 16 16h80c8.836 0 16 7.164 16 16v57.375l68.688-68.687c3-3 7.07-4.688 11.312-4.688h240c8.836 0 16-7.164 16-16v-256c0-8.836-7.164-16-16-16zm0 0" }, null, -1),
-    i("path", { d: "M160 144.5c-17.672 0-32-14.328-32-32s14.328-32 32-32 32 14.328 32 32-14.328 32-32 32M352 144.5c-17.672 0-32-14.328-32-32s14.328-32 32-32 32 14.328 32 32-14.328 32-32 32M256 288.5c-52.996-.05-95.945-43.004-96-96 0-8.836 7.164-16 16-16s16 7.164 16 16c0 35.348 28.652 64 64 64s64-28.652 64-64c0-8.836 7.164-16 16-16s16 7.164 16 16c-.055 52.996-43.004 95.945-96 96m0 0" }, null, -1)
+function qe(e, t) {
+  return l(), i("svg", Ce, t[0] || (t[0] = [
+    r("path", { d: "M128 448.5c-8.836 0-16-7.164-16-16v-80H48c-26.512 0-48-21.492-48-48v-256C0 21.988 21.488.5 48 .5h416c26.512 0 48 21.488 48 48v256c0 26.508-21.488 48-48 48H230.625l-91.312 91.313c-3 3-7.07 4.687-11.313 4.687m-80-416c-8.836 0-16 7.164-16 16v256c0 8.836 7.164 16 16 16h80c8.836 0 16 7.164 16 16v57.375l68.688-68.687c3-3 7.07-4.688 11.312-4.688h240c8.836 0 16-7.164 16-16v-256c0-8.836-7.164-16-16-16zm0 0" }, null, -1),
+    r("path", { d: "M160 144.5c-17.672 0-32-14.328-32-32s14.328-32 32-32 32 14.328 32 32-14.328 32-32 32M352 144.5c-17.672 0-32-14.328-32-32s14.328-32 32-32 32 14.328 32 32-14.328 32-32 32M256 288.5c-52.996-.05-95.945-43.004-96-96 0-8.836 7.164-16 16-16s16 7.164 16 16c0 35.348 28.652 64 64 64s64-28.652 64-64c0-8.836 7.164-16 16-16s16 7.164 16 16c-.055 52.996-43.004 95.945-96 96m0 0" }, null, -1)
   ]));
 }
-const _e = { render: ke }, xe = {
+const Se = { render: qe }, we = {
   xmlns: "http://www.w3.org/2000/svg",
   "xml:space": "preserve",
   viewBox: "0 0 512.001 512.001"
 };
-function Ce(e, o) {
-  return s(), u("svg", xe, o[0] || (o[0] = [
-    i("path", { d: "M284.286 256.002 506.143 34.144c7.811-7.811 7.811-20.475 0-28.285s-20.475-7.811-28.285 0L256 227.717 34.143 5.859c-7.811-7.811-20.475-7.811-28.285 0s-7.811 20.475 0 28.285l221.857 221.857L5.858 477.859c-7.811 7.811-7.811 20.475 0 28.285a19.94 19.94 0 0 0 14.143 5.857 19.94 19.94 0 0 0 14.143-5.857L256 284.287l221.857 221.857c3.905 3.905 9.024 5.857 14.143 5.857s10.237-1.952 14.143-5.857c7.811-7.811 7.811-20.475 0-28.285z" }, null, -1)
+function $e(e, t) {
+  return l(), i("svg", we, t[0] || (t[0] = [
+    r("path", { d: "M284.286 256.002 506.143 34.144c7.811-7.811 7.811-20.475 0-28.285s-20.475-7.811-28.285 0L256 227.717 34.143 5.859c-7.811-7.811-20.475-7.811-28.285 0s-7.811 20.475 0 28.285l221.857 221.857L5.858 477.859c-7.811 7.811-7.811 20.475 0 28.285a19.94 19.94 0 0 0 14.143 5.857 19.94 19.94 0 0 0 14.143-5.857L256 284.287l221.857 221.857c3.905 3.905 9.024 5.857 14.143 5.857s10.237-1.952 14.143-5.857c7.811-7.811 7.811-20.475 0-28.285z" }, null, -1)
   ]));
 }
-const qe = { render: Ce }, Se = {
+const Ue = { render: $e }, De = {
   key: 0,
   class: "qkb-board"
-}, we = { class: "qkb-bot-bubble" }, $e = { class: "qkb-preload-image" }, De = {
+}, Ie = { class: "qkb-bot-bubble" }, Te = { class: "qkb-preload-image" }, Ae = {
   key: 0,
   class: "qkb-msg-avatar__img"
-}, Te = {
+}, Ee = {
   __name: "BotUI",
   props: {
     options: {
@@ -472,24 +496,24 @@ const qe = { render: Ce }, Se = {
       type: Number
     }
   },
-  emits: ["init", "destroy", "msg-send"],
-  setup(e, { emit: o }) {
+  emits: ["init", "destroy", "msg-send", "button-clicked"],
+  setup(e, { emit: t }) {
     g((c) => ({
-      "9da131c2": t.value.windowZIndex,
-      "5c73db0c": t.value.windowPosition.bottom || "auto",
-      d99e95a2: t.value.windowPosition.right || "auto",
-      cf8f3cb0: t.value.windowPosition.top || "auto",
-      "5101e4d6": t.value.windowPosition.left || "auto",
-      "7e875abb": t.value.bubbleZIndex,
-      f7ac3d44: t.value.bubblePosition.bottom || "auto",
-      "676579cb": t.value.bubblePosition.right || "auto",
-      "3ccd9d44": t.value.bubblePosition.top || "auto",
-      "3f141cba": t.value.bubblePosition.left || "auto",
-      "4212fad3": t.value.bubbleBtnSize + "px",
-      "07556d71": t.value.colorScheme,
-      "7192a202": t.value.textColor
+      12679521: o.value.windowZIndex,
+      cd525d90: o.value.windowPosition.bottom || "auto",
+      "4f4e26b1": o.value.windowPosition.right || "auto",
+      "9eaf68ac": o.value.windowPosition.top || "auto",
+      "468f3b14": o.value.windowPosition.left || "auto",
+      "4080ee86": o.value.bubbleZIndex,
+      "4bbaa01c": o.value.bubblePosition.bottom || "auto",
+      "2382eb4d": o.value.bubblePosition.right || "auto",
+      "553d8746": o.value.bubblePosition.top || "auto",
+      "34a172f8": o.value.bubblePosition.left || "auto",
+      "5fc606d5": o.value.bubbleBtnSize + "px",
+      "233e772f": o.value.colorScheme,
+      "50b3103d": o.value.textColor
     }));
-    const l = e, r = o, n = k(!1), a = {
+    const s = e, a = t, b = k(!1), n = {
       botTitle: "Chatbot",
       colorScheme: "#1b53d0",
       textColor: "#fff",
@@ -519,65 +543,69 @@ const qe = { render: Ce }, Se = {
         top: null,
         left: null
       }
-    }, t = x(() => ({ ...a, ...l.options })), f = x(() => {
+    }, o = _(() => ({ ...n, ...s.options })), f = _(() => {
       const c = [];
-      return t.value.animation && c.push("qkb-bot-ui--animate"), c;
+      return o.value.animation && c.push("qkb-bot-ui--animate"), c;
     }), v = () => {
-      n.value || b();
-    }, _ = () => {
-      n.value && b();
-    }, b = () => {
-      n.value = !n.value, n.value ? r("init") : r("destroy");
+      b.value || u();
+    }, x = () => {
+      b.value && u();
+    }, u = () => {
+      b.value = !b.value, b.value ? a("init") : a("destroy");
     }, q = (c) => {
-      r("msg-send", c);
+      a("msg-send", c);
+    }, S = (c) => {
+      a("button-clicked", c);
     };
-    return l.isOpen && (l.openDelay ? setTimeout(v, l.openDelay) : b()), M(() => {
-      document.addEventListener($.EVENT_OPEN, v), document.addEventListener($.EVENT_CLOSE, _), document.addEventListener($.EVENT_TOGGLE, b);
-    }), (c, Ie) => (s(), u("div", {
-      class: w(["qkb-bot-ui", f.value])
+    return s.isOpen && (s.openDelay ? setTimeout(v, s.openDelay) : u()), P(() => {
+      document.addEventListener(U.EVENT_OPEN, v), document.addEventListener(U.EVENT_CLOSE, x), document.addEventListener(U.EVENT_TOGGLE, u), I.on("button-clicked", S);
+    }), V(() => {
+      I.off("button-clicked", S);
+    }), (c, ze) => (l(), i("div", {
+      class: $(["qkb-bot-ui", f.value])
     }, [
-      p(T, { name: "qkb-fadeUp" }, {
-        default: B(() => [
-          n.value ? (s(), u("div", Se, [
-            p(H, {
-              "bot-title": t.value.botTitle,
-              "color-scheme": t.value.colorScheme,
-              "text-color": t.value.textColor,
-              onCloseBot: b
+      B(T, { name: "qkb-fadeUp" }, {
+        default: p(() => [
+          b.value ? (l(), i("div", De, [
+            B(Z, {
+              "bot-title": o.value.botTitle,
+              "color-scheme": o.value.colorScheme,
+              "text-color": o.value.textColor,
+              onCloseBot: u
             }, {
-              header: B(() => [
+              header: p(() => [
                 d(c.$slots, "header", {}, void 0, !0)
               ]),
               _: 3
             }, 8, ["bot-title", "color-scheme", "text-color"]),
-            p(ie, {
+            B(ge, {
               "bot-typing": e.botTyping,
               "main-data": e.messages,
-              "board-content-bg": t.value.boardContentBg,
-              "bot-avatar-size": t.value.botAvatarSize,
-              "bot-avatar-img": t.value.botAvatarImg,
-              "msg-bubble-bg-bot": t.value.msgBubbleBgBot,
-              "msg-bubble-color-bot": t.value.msgBubbleColorBot,
-              "msg-bubble-bg-user": t.value.msgBubbleBgUser,
-              "msg-bubble-color-user": t.value.msgBubbleColorUser
+              "board-content-bg": o.value.boardContentBg,
+              "bot-avatar-size": o.value.botAvatarSize,
+              "bot-avatar-img": o.value.botAvatarImg,
+              "msg-bubble-bg-bot": o.value.msgBubbleBgBot,
+              "msg-bubble-color-bot": o.value.msgBubbleColorBot,
+              "msg-bubble-bg-user": o.value.msgBubbleBgUser,
+              "msg-bubble-color-user": o.value.msgBubbleColorUser
             }, {
-              botTyping: B(() => [
+              botTyping: p(() => [
                 d(c.$slots, "botTyping", {}, void 0, !0)
               ]),
               _: 3
             }, 8, ["bot-typing", "main-data", "board-content-bg", "bot-avatar-size", "bot-avatar-img", "msg-bubble-bg-bot", "msg-bubble-color-bot", "msg-bubble-bg-user", "msg-bubble-color-user"]),
-            p(he, {
+            B(_e, {
               "input-disable": e.inputDisable,
-              "input-placeholder": t.value.inputPlaceholder,
-              "input-disable-placeholder": t.value.inputDisablePlaceholder,
-              "input-disable-bg": t.value.inputDisableBg,
-              "msg-bubble-bg-user": t.value.msgBubbleBgUser,
+              "input-placeholder": o.value.inputPlaceholder,
+              "input-disable-placeholder": o.value.inputDisablePlaceholder,
+              "input-disable-bg": o.value.inputDisableBg,
+              "msg-bubble-bg-user": o.value.msgBubbleBgUser,
               onMsgSend: q
             }, {
-              actions: B(() => [
+              actions: p(() => [
                 d(c.$slots, "actions", {}, void 0, !0)
               ]),
-              sendButton: B(() => [
+              sendButton: p(() => [
                 d(c.$slots, "sendButton", {}, void 0, !0)
               ]),
               _: 3
@@ -586,18 +614,18 @@ const qe = { render: Ce }, Se = {
         ]),
         _: 3
       }),
-      i("div", we, [
-        i("button", {
+      r("div", Ie, [
+        r("button", {
           class: "qkb-bubble-btn",
-          onClick: b
+          onClick: u
         }, [
           d(c.$slots, "bubbleButton", {}, () => [
-            p(T, { name: "qkb-scaleUp" }, {
-              default: B(() => [
-                n.value ? (s(), C(S(D(qe)), {
+            B(T, { name: "qkb-scaleUp" }, {
+              default: p(() => [
+                b.value ? (l(), C(w(D(Ue)), {
                   key: "2",
                   class: "qkb-bubble-btn-icon qkb-bubble-btn-icon--close"
-                })) : (s(), C(S(D(_e)), {
+                })) : (l(), C(w(D(Se)), {
                   key: "1",
                   class: "qkb-bubble-btn-icon"
                 }))
@@ -607,17 +635,17 @@ const qe = { render: Ce }, Se = {
           ], !0)
         ])
       ]),
-      i("div", $e, [
-        t.value.botAvatarImg ? (s(), u("div", De)) : y("", !0)
+      r("div", Te, [
+        o.value.botAvatarImg ? (l(), i("div", Ae)) : y("", !0)
       ])
     ], 2));
   }
-}, Ue = /* @__PURE__ */ m(Te, [["__scopeId", "data-v-cb88ad08"]]), Ee = {
-  install(e, o) {
-    e.component("VueBotUI", Ue);
+}, Me = /* @__PURE__ */ m(Ee, [["__scopeId", "data-v-b60df9e6"]]), Oe = {
+  install(e, t) {
+    e.component("VueBotUI", Me);
   }
 };
 export {
-  Ue as VueBotUI,
-  Ee as default
+  Me as VueBotUI,
+  Oe as default
 };

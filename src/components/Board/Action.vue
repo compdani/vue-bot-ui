@@ -7,7 +7,7 @@
           v-model="messageText"
           class="qkb-board-action__input"
           :disabled="inputDisable"
-          :placeholder="inputDisablePlaceholder && inputDisable ? inputDisablePlaceholder : inputPlaceholder"
+          :placeholder="placeholderText"
           @keydown="handleKeydown"
           @input="resizeTextarea"
           rows="1"
@@ -40,7 +40,11 @@ const props = defineProps({
   },
   inputDisablePlaceholder: {
     type: String,
-    default: 'Hit the buttons above to respond'
+    default: 'Please wait for bot response'
+  },
+  inputDisableButtonPlaceholder: {
+    type: String,
+    default: 'Please select an option above'
   },
   inputDisable: {
     type: Boolean,
@@ -53,6 +57,10 @@ const props = defineProps({
   msgBubbleBgUser: {
     type: String,
     default: '#4356e0'
+  },
+  lastMessageType: {
+    type: String,
+    default: null
   }
 })
 
@@ -73,6 +81,20 @@ const actionClass = computed(() => {
   }
 
   return actionClasses
+})
+
+const placeholderText = computed(() => {
+  if (!props.inputDisable) {
+    return props.inputPlaceholder
+  }
+  
+  // If input is disabled and last message type is button, use button-specific placeholder
+  if (props.lastMessageType === 'button' && props.inputDisableButtonPlaceholder) {
+    return props.inputDisableButtonPlaceholder
+  }
+  
+  // Otherwise use regular disable placeholder
+  return props.inputDisablePlaceholder
 })
 
 onMounted(() => {
