@@ -1,6 +1,6 @@
 {
   "name": "@dreia/vue3-bot-ui",
-  "version": "0.1.0-beta.3b",
+  "version": "0.1.0-beta.3f",
   "description": "Chatbot UI using Vue.js 3",
   "author": {
     "name": "Danilo Urrutia",
@@ -60,7 +60,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/comdani/vue3-bot-ui.git"
+    "url": "git+https://github.com/comdani/vue3-bot-ui.git"
   },
   "bugs": {
     "url": "https://github.com/comdani/vue3-bot-ui/issues"

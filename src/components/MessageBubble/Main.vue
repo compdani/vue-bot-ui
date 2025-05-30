@@ -7,6 +7,11 @@
       v-if="componentType"
       :is="componentType"
       :main-data="message"
+      :msg-bubble-bg-bot="msgBubbleBgBot"
+      :msg-bubble-color-bot="msgBubbleColorBot"
+      :msg-bubble-bg-user="msgBubbleBgUser"
+      :msg-bubble-color-user="msgBubbleColorUser"
+      :is-user-message="message.agent === 'user'"
     />
     <div v-if="message.createdAt" class="qkb-msg-bubble__time">
       {{ message.createdAt }}
@@ -23,6 +28,30 @@ const props = defineProps({
   message: {
     type: Object,
     required: true
+  },
+  botAvatarSize: {
+    type: Number,
+    default: 32
+  },
+  botAvatarImg: {
+    type: String,
+    default: 'http://placehold.it/200x200'
+  },
+  msgBubbleBgBot: {
+    type: String,
+    default: '#f0f0f0'
+  },
+  msgBubbleColorBot: {
+    type: String,
+    default: '#000'
+  },
+  msgBubbleBgUser: {
+    type: String,
+    default: '#4356e0'
+  },
+  msgBubbleColorUser: {
+    type: String,
+    default: '#fff'
   }
 })
 
@@ -60,8 +89,8 @@ const componentType = computed(() => {
 }
 
 .qkb-msg-avatar {
-  width: 36px;
-  height: 36px;
+  width: v-bind('botAvatarSize + "px"');
+  height: v-bind('botAvatarSize + "px"');
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
@@ -76,6 +105,7 @@ const componentType = computed(() => {
   height: 24px;
   background-size: cover;
   background-position: center;
+  background-image: v-bind('"url(" + botAvatarImg + ")"');
 }
 
 .qkb-msg-bubble__time {

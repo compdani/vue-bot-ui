@@ -9,6 +9,26 @@ defineProps({
   mainData: {
     type: Object,
     required: true
+  },
+  msgBubbleBgBot: {
+    type: String,
+    default: '#f0f0f0'
+  },
+  msgBubbleColorBot: {
+    type: String,
+    default: '#000'
+  },
+  msgBubbleBgUser: {
+    type: String,
+    default: '#4356e0'
+  },
+  msgBubbleColorUser: {
+    type: String,
+    default: '#fff'
+  },
+  isUserMessage: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
@@ -23,12 +43,7 @@ defineProps({
   border-radius: 18px;
   font-size: 14px;
   line-height: 1.4;
-  background: #f0f4ff;
-  color: #1a1a1a;
-}
-
-:deep(.qkb-msg-bubble--user) .qkb-msg-bubble-component__text {
-  background: #1a4bff;
-  color: white;
+  background: v-bind('isUserMessage ? msgBubbleBgUser : msgBubbleBgBot');
+  color: v-bind('isUserMessage ? msgBubbleColorUser : msgBubbleColorBot');
 }
 </style>

@@ -9,7 +9,7 @@
         class="qkb-mb-button-options__item"
       >
         <button
-          v-if="isFunction"
+          v-if="isFunction(item)"
           class="qkb-mb-button-options__btn"
           @click="selectOption(item)"
         >
@@ -29,16 +29,31 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-const isFunction = ref(false)
-onMounted(() => {
-  isFunction.value = typeof props.mainData.onClick === 'function'
-})
-
+import { ref } from 'vue'
 const props = defineProps({
   mainData: {
     type: Object,
     required: true
+  },
+  msgBubbleBgBot: {
+    type: String,
+    default: '#f0f0f0'
+  },
+  msgBubbleColorBot: {
+    type: String,
+    default: '#000'
+  },
+  msgBubbleBgUser: {
+    type: String,
+    default: '#4356e0'
+  },
+  msgBubbleColorUser: {
+    type: String,
+    default: '#fff'
+  },
+  isUserMessage: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -46,10 +61,19 @@ const selectedItem = ref(null)
 
 const selectOption = (option) => {
   selectedItem.value = option.value
-  if (isFunction.value) {
-    props.mainData.onClick(option)
+  if (isFunction(option)) {
+    option.onClick(option.value)
   }
+  emit('select-option', option)
 }
+
+const isFunction = (option) => {
+  if (typeof option === 'object' && option.onClick) {
+    return true
+  }
+  return false
+}
+
 </script>
 
 <style scoped>
@@ -58,8 +82,8 @@ const selectOption = (option) => {
   border-radius: 18px;
   font-size: 14px;
   line-height: 1.4;
-  background: #f0f4ff;
-  color: #1a1a1a;
+  background: v-bind('msgBubbleBgBot');
+  color: v-bind('msgBubbleColorBot');
   margin-bottom: 8px;
 }
 
@@ -77,24 +101,24 @@ const selectOption = (option) => {
   display: block;
   width: 100%;
   padding: 10px 16px;
-  border: 1px solid #1a4bff;
+  border: 1px solid v-bind('msgBubbleBgUser');
   border-radius: 12px;
   background: white;
   cursor: pointer;
   font-size: 14px;
   text-align: center;
   text-decoration: none;
-  color: #1a4bff;
+  color: v-bind('msgBubbleBgUser');
   transition: all 0.2s;
 }
 
 .qkb-mb-button-options__btn:hover {
-  background: #1a4bff;
-  color: white;
+  background: v-bind('msgBubbleBgUser');
+  color: v-bind('msgBubbleColorUser');
 }
 
 .qkb-mb-button-options__item.active .qkb-mb-button-options__btn {
-  background: #1a4bff;
-  color: white;
+  background: v-bind('msgBubbleBgUser');
+  color: v-bind('msgBubbleColorUser');
 }
 </style>

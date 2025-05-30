@@ -5,10 +5,21 @@
         v-for="(item, index) in mainData"
         :key="index"
         :message="item"
+        :bot-avatar-size="botAvatarSize"
+        :bot-avatar-img="botAvatarImg"
+        :msg-bubble-bg-bot="msgBubbleBgBot"
+        :msg-bubble-color-bot="msgBubbleColorBot"
+        :msg-bubble-bg-user="msgBubbleBgUser"
+        :msg-bubble-color-user="msgBubbleColorUser"
       />
       <div v-if="botTyping" class="qkb-board-content__bot-typing">
         <slot name="botTyping">
-          <MessageTyping />
+          <MessageTyping 
+            :bot-avatar-size="botAvatarSize"
+            :bot-avatar-img="botAvatarImg"
+            :msg-bubble-bg-bot="msgBubbleBgBot"
+            :msg-bubble-color-bot="msgBubbleColorBot"
+          />
         </slot>
       </div>
     </div>
@@ -28,6 +39,34 @@ const props = defineProps({
   botTyping: {
     type: Boolean,
     default: false
+  },
+  boardContentBg: {
+    type: String,
+    default: '#fff'
+  },
+  botAvatarSize: {
+    type: Number,
+    default: 32
+  },
+  botAvatarImg: {
+    type: String,
+    default: 'http://placehold.it/200x200'
+  },
+  msgBubbleBgBot: {
+    type: String,
+    default: '#f0f0f0'
+  },
+  msgBubbleColorBot: {
+    type: String,
+    default: '#000'
+  },
+  msgBubbleBgUser: {
+    type: String,
+    default: '#4356e0'
+  },
+  msgBubbleColorUser: {
+    type: String,
+    default: '#fff'
   }
 })
 
@@ -52,6 +91,7 @@ watch(() => props.mainData, () => {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
+  background-color: v-bind('boardContentBg');
 }
 
 .qkb-board-content__bubbles {

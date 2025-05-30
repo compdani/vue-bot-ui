@@ -1,8 +1,13 @@
 <template>
   <div class="qkb-bot-ui" :class="uiClasses">
     <transition name="qkb-fadeUp">
-      <div class="qkb-board" v-if="botActive" :style="windowStyles">
-        <BoardHeader :bot-title="optionsMain.botTitle" @close-bot="botToggle">
+      <div class="qkb-board" v-if="botActive">
+        <BoardHeader 
+          :bot-title="optionsMain.botTitle" 
+          :color-scheme="optionsMain.colorScheme"
+          :text-color="optionsMain.textColor"
+          @close-bot="botToggle"
+        >
           <template #header>
             <slot name="header"></slot>
           </template>
@@ -10,6 +15,13 @@
         <BoardContent 
           :bot-typing="botTyping" 
           :main-data="messages"
+          :board-content-bg="optionsMain.boardContentBg"
+          :bot-avatar-size="optionsMain.botAvatarSize"
+          :bot-avatar-img="optionsMain.botAvatarImg"
+          :msg-bubble-bg-bot="optionsMain.msgBubbleBgBot"
+          :msg-bubble-color-bot="optionsMain.msgBubbleColorBot"
+          :msg-bubble-bg-user="optionsMain.msgBubbleBgUser"
+          :msg-bubble-color-user="optionsMain.msgBubbleColorUser"
         >
           <template #botTyping>
             <slot name="botTyping"></slot>
@@ -19,6 +31,8 @@
           :input-disable="inputDisable"
           :input-placeholder="optionsMain.inputPlaceholder"
           :input-disable-placeholder="optionsMain.inputDisablePlaceholder"
+          :input-disable-bg="optionsMain.inputDisableBg"
+          :msg-bubble-bg-user="optionsMain.msgBubbleBgUser"
           @msg-send="sendMessage"
         >
           <template #actions>
@@ -30,7 +44,7 @@
         </BoardAction>
       </div>
     </transition>
-    <div class="qkb-bot-bubble" :style="bubbleStyles">
+    <div class="qkb-bot-bubble">
       <button class="qkb-bubble-btn" @click="botToggle">
         <slot name="bubbleButton">
           <transition name="qkb-scaleUp">
@@ -50,7 +64,6 @@
         </slot>
       </button>
     </div>
-    <AppStyle :options="optionsMain" />
     <div class="qkb-preload-image">
       <div v-if="optionsMain.botAvatarImg" class="qkb-msg-avatar__img"></div>
     </div>
@@ -63,7 +76,6 @@ import Config from '../config'
 import BoardHeader from './Board/Header.vue'
 import BoardContent from './Board/Content.vue'
 import BoardAction from './Board/Action.vue'
-import AppStyle from './AppStyle.vue'
 import BubbleIcon from '../assets/icons/bubble.svg'
 import CloseIcon from '../assets/icons/close.svg'
 
@@ -138,34 +150,6 @@ const uiClasses = computed(() => {
   return classes
 })
 
-const windowStyles = computed(() => {
-  const styles = {
-    zIndex: optionsMain.value.windowZIndex
-  }
-
-  const position = optionsMain.value.windowPosition
-  if (position.bottom !== null) styles.bottom = position.bottom
-  if (position.right !== null) styles.right = position.right
-  if (position.top !== null) styles.top = position.top
-  if (position.left !== null) styles.left = position.left
-
-  return styles
-})
-
-const bubbleStyles = computed(() => {
-  const styles = {
-    zIndex: optionsMain.value.bubbleZIndex
-  }
-
-  const position = optionsMain.value.bubblePosition
-  if (position.bottom !== null) styles.bottom = position.bottom
-  if (position.right !== null) styles.right = position.right
-  if (position.top !== null) styles.top = position.top
-  if (position.left !== null) styles.left = position.left
-
-  return styles
-})
-
 const botOpen = () => {
   if (!botActive.value) {
     botToggle()
@@ -227,15 +211,25 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  z-index: v-bind('optionsMain.windowZIndex');
+  bottom: v-bind('optionsMain.windowPosition.bottom || "auto"');
+  right: v-bind('optionsMain.windowPosition.right || "auto"');
+  top: v-bind('optionsMain.windowPosition.top || "auto"');
+  left: v-bind('optionsMain.windowPosition.left || "auto"');
 }
 
 .qkb-bot-bubble {
   position: fixed;
+  z-index: v-bind('optionsMain.bubbleZIndex');
+  bottom: v-bind('optionsMain.bubblePosition.bottom || "auto"');
+  right: v-bind('optionsMain.bubblePosition.right || "auto"');
+  top: v-bind('optionsMain.bubblePosition.top || "auto"');
+  left: v-bind('optionsMain.bubblePosition.left || "auto"');
 }
 
 .qkb-bubble-btn {
-  width: 56px;
-  height: 56px;
+  width: v-bind('optionsMain.bubbleBtnSize + "px"');
+  height: v-bind('optionsMain.bubbleBtnSize + "px"');
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -243,7 +237,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   transition: transform 0.2s, box-shadow 0.2s;
-  background: #1a4bff;
+  background: v-bind('optionsMain.colorScheme');
   box-shadow: 0 2px 10px rgba(26, 75, 255, 0.3);
 }
 
@@ -255,7 +249,7 @@ onMounted(() => {
 .qkb-bubble-btn-icon {
   width: 24px;
   height: 24px;
-  fill: #fff;
+  fill: v-bind('optionsMain.textColor');
 }
 
 .qkb-bubble-btn-icon--close {

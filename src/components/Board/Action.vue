@@ -45,6 +45,14 @@ const props = defineProps({
   inputDisable: {
     type: Boolean,
     default: false
+  },
+  inputDisableBg: {
+    type: String,
+    default: '#fff'
+  },
+  msgBubbleBgUser: {
+    type: String,
+    default: '#4356e0'
   }
 })
 
@@ -84,13 +92,13 @@ const sendMessage = () => {
 
 const handleKeydown = (event) => {
   if (event.key === 'Enter') {
-    if (event.ctrlKey || event.metaKey) {
-      // Ctrl+Enter or Cmd+Enter: allow default behavior (add newline)
-      return
-    } else {
-      // Regular Enter: send message
+    if (event.shiftKey) {
+      // Shift+Enter: send message
       event.preventDefault()
       sendMessage()
+    } else {
+      // Regular Enter: allow default behavior (add newline)
+      return
     }
   }
 }
@@ -123,6 +131,10 @@ watch(messageText, () => {
   background: #f8f9fb;
   border-radius: 24px;
   padding: 6px;
+}
+
+.qkb-board-action--disabled .qkb-board-action__wrapper {
+  background-color: v-bind('inputDisableBg');
 }
 
 .qkb-board-action__msg-box {
@@ -180,7 +192,7 @@ watch(messageText, () => {
 }
 
 .qkb-action-item--send {
-  background: #1a4bff;
+  background: v-bind('msgBubbleBgUser');
   color: white;
 }
 

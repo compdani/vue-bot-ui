@@ -13,7 +13,10 @@ A highly customizable chatbot UI component for Vue.js applications.
 - 🔌 Easy integration with any bot API
 - ⚡ Event-driven architecture
 - 🎯 Slot system for custom components
-- 📱 Responsive design
+- 🎯 Responsive design
+- ⌨️ Smart keyboard controls (Shift+Enter to send, Enter for new lines)
+- 🔄 Auto-resizing text input
+- 💻 TypeScript support
 
 ## Installation
 
@@ -415,6 +418,16 @@ export default {
 }
 </script>
 
+## Keyboard Controls
+
+The input field supports intuitive keyboard shortcuts:
+
+- **Enter**: Add a new line to your message
+- **Shift+Enter**: Send the message
+- **Auto-resize**: The textarea automatically adjusts height as you type
+
+This behavior matches modern chat applications and allows for both single-line quick messages and multi-line formatted text.
+
 ## Component Props
 
 | Prop | Type | Default | Description |
@@ -443,9 +456,9 @@ export default {
 | `msgBubbleColorBot` | String | '#000' | Bot message text color |
 | `msgBubbleBgUser` | String | '#4356e0' | User message background |
 | `msgBubbleColorUser` | String | '#fff' | User message text color |
-| `inputPlaceholder` | String | 'Message' | Input placeholder text |
+| `inputPlaceholder` | String | 'Type here...' | Input placeholder text |
 | `inputDisableBg` | String | '#fff' | Disabled input background |
-| `inputDisablePlaceholder` | String | null | Disabled input placeholder |
+| `inputDisablePlaceholder` | String | 'Hit the buttons above to respond' | Disabled input placeholder |
 | `bubbleZIndex` | Number | 9999 | Z-index for the chat bubble |
 | `bubblePosition` | Object | `{bottom: '20px', right: '20px', top: null, left: null}` | Position of the chat bubble |
 | `windowZIndex` | Number | 9999 | Z-index for the entire chat window |
@@ -501,6 +514,10 @@ bubbleZIndex: 10001
   type: 'button',
   text: 'Please select an option:',
   disableInput: true,
+  onClick: (option) => {
+    // Handle button click
+    console.log('Selected:', option)
+  },
   options: [
     {
       text: 'Open Google',

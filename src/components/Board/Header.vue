@@ -11,6 +11,14 @@ defineProps({
   botTitle: {
     type: String,
     default: 'Chatbot'
+  },
+  colorScheme: {
+    type: String,
+    default: '#1a4bff'
+  },
+  textColor: {
+    type: String,
+    default: '#fff'
   }
 })
 </script>
@@ -18,13 +26,13 @@ defineProps({
 <style scoped>
 .qkb-board-header {
   padding: 16px 20px;
-  background: #1a4bff;
+  background: v-bind('colorScheme');
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
 }
 
 .qkb-board-header__title {
-  color: white;
+  color: v-bind('textColor');
   font-size: 18px;
   font-weight: 600;
 }
