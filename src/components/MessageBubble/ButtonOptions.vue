@@ -63,8 +63,9 @@ const selectOption = (option) => {
   selectedItem.value = option.value
   if (isFunction(option)) {
     option.onClick(option.value)
+    return
   }
-  emit('select-option', option)
+  console.log("Error: option.onClick is not a function")
 }
 
 const isFunction = (option) => {
