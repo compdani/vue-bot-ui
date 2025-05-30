@@ -1,21 +1,26 @@
 export const fakeMessages = [
   {
     'type': 'text',
-    'text': 'Hello. Have a nice day!',
+    'text': 'Hello! 👋 Welcome to our support system. I can help you with various topics.',
     'disableInput': false
   },
   {
     'type': 'button',
-    'text': 'How can we help you today?',
+    'text': 'How can I help you today? Choose an option below:',
     'options': [
       {
-        'text': 'Search Suport Articles',
+        'text': '🔍 Search Support Articles',
         'value': 'search',
         'action': 'postback'
       },
       {
-        'text': 'Submit Support Ticket',
+        'text': '🎫 Submit Support Ticket',
         'value': 'submit_ticket',
+        'action': 'postback'
+      },
+      {
+        'text': '💬 Test Multi-line Input',
+        'value': 'test_input',
         'action': 'postback'
       }
     ],
@@ -23,25 +28,25 @@ export const fakeMessages = [
   },
   {
     'type': 'text',
-    'text': 'Please type your problem',
+    'text': 'Great! Try the new input features:\n\n✨ Press Enter to send messages\n✨ Press Ctrl+Enter (or Cmd+Enter on Mac) to add line breaks\n✨ The input auto-resizes as you type\n\nGo ahead, try typing a multi-line message!',
     'disableInput': false
   },
   {
     'type': 'button',
-    'text': 'Here are the results from our knowledgebase.',
+    'text': 'Here are some helpful resources I found for you:',
     'options': [
       {
-        'text': 'How to create a menu',
-        'value': 'https://google.com',
+        'text': '📚 Getting Started Guide',
+        'value': 'https://github.com/JuzSer/vue-bot-ui#quick-start',
         'action': 'url'
       },
       {
-        'text': 'How to add a submenu to a menu',
-        'value': 'https://google.com',
+        'text': '⚙️ Configuration Options',
+        'value': 'https://github.com/JuzSer/vue-bot-ui#ui-customization-options',
         'action': 'url'
       },
       {
-        'text': "Not what I'm looking for",
+        'text': '❌ Not what I\'m looking for',
         'value': 'result_not_match',
         'action': 'postback'
       }
@@ -50,16 +55,21 @@ export const fakeMessages = [
   },
   {
     'type': 'text',
-    'text': 'Sorry to hear that. Please type your problem and we will create a ticket for you.',
+    'text': 'No problem! Let me help you differently.\n\nTry testing the new input features:\n• Type multiple lines using Ctrl+Enter\n• Send with Enter\n• Watch the auto-resize in action!',
     'disableInput': false
   },
   {
     'type': 'button',
-    'text': 'All done! Your support ticket is created.',
+    'text': 'Perfect! Your request has been processed. What would you like to do next?',
     'options': [
       {
-        'text': 'View ticket',
-        'value': 'https://google.com',
+        'text': '🔄 Try Again',
+        'value': 'restart',
+        'action': 'postback'
+      },
+      {
+        'text': '📖 View Documentation',
+        'value': 'https://github.com/JuzSer/vue-bot-ui',
         'action': 'url'
       }
     ],

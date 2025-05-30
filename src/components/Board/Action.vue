@@ -2,15 +2,16 @@
   <div class="qkb-board-action" :class="actionClass">
     <div class="qkb-board-action__wrapper">
       <div class="qkb-board-action__msg-box">
-        <input
+        <textarea
           ref="qkbMessageInput"
           v-model="messageText"
-          type="text"
           class="qkb-board-action__input"
           :disabled="inputDisable"
           :placeholder="inputDisablePlaceholder && inputDisable ? inputDisablePlaceholder : inputPlaceholder"
-          @keydown.enter="sendMessage"
-        />
+          @keydown="handleKeydown"
+          @input="resizeTextarea"
+          rows="1"
+        ></textarea>
       </div>
       <div class="qkb-board-action__extra">
         <slot name="actions"></slot>
@@ -29,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import IconSend from '../../assets/icons/send.svg'
 
 const props = defineProps({
@@ -70,6 +71,7 @@ onMounted(() => {
   if (!props.inputDisable) {
     qkbMessageInput.value?.focus()
   }
+  resizeTextarea()
 })
 
 const sendMessage = () => {
@@ -79,6 +81,32 @@ const sendMessage = () => {
     qkbMessageInput.value?.focus()
   }
 }
+
+const handleKeydown = (event) => {
+  if (event.key === 'Enter') {
+    if (event.ctrlKey || event.metaKey) {
+      // Ctrl+Enter or Cmd+Enter: allow default behavior (add newline)
+      return
+    } else {
+      // Regular Enter: send message
+      event.preventDefault()
+      sendMessage()
+    }
+  }
+}
+
+const resizeTextarea = () => {
+  if (qkbMessageInput.value) {
+    qkbMessageInput.value.style.height = 'auto'
+    qkbMessageInput.value.style.height = qkbMessageInput.value.scrollHeight + 'px'
+  }
+}
+
+watch(messageText, () => {
+  nextTick(() => {
+    resizeTextarea()
+  })
+})
 </script>
 
 <style scoped>
@@ -112,6 +140,11 @@ const sendMessage = () => {
   line-height: 1.5;
   color: #1a1a1a;
   background: transparent;
+  resize: none;
+  font-family: inherit;
+  min-height: 20px;
+  max-height: 120px;
+  overflow-y: auto;
 }
 
 .qkb-board-action__input::placeholder {

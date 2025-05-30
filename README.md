@@ -88,7 +88,7 @@ export default {
 
 ## Button Message Implementation Example
 
-Here's a complete example showing how to implement and handle button messages with external processing:
+Here's a complete example showing how to implement button messages with onClick functions defined in the message data:
 
 ```vue
 <template>
@@ -121,54 +121,35 @@ export default {
     }
   },
   methods: {
+    // Handle regular text messages
     handleMessageSend(message) {
-      // Button selections and text messages are both emitted here
-      console.log('Message received:', message)
+      console.log('Text message sent:', message)
       
-      // Extract the message content (works for both text input and button selection)
-      const messageText = message.text || message.value
+      // Add user message to chat
+      this.messages.push({
+        agent: 'user',
+        type: 'text',
+        text: message.text,
+        disableInput: false
+      })
       
-      // Add user's action to chat history
-      this.addUserMessage(messageText, message)
-      
-      // Process the message/button selection externally
-      this.processUserInput(messageText, message)
+      // Process the text message
+      this.processUserInput(message.text)
     },
 
-    addUserMessage(text, originalMessage) {
-      // For button selections, show what the user selected
-      if (originalMessage.text) {
-        // This is a text message from input
-        this.messages.push({
-          agent: 'user',
-          type: 'text',
-          text: text,
-          disableInput: false
-        })
-      } else if (originalMessage.value) {
-        // This is a button selection - show the button text that was clicked
-        this.messages.push({
-          agent: 'user',
-          type: 'text',
-          text: originalMessage.text, // The button's display text
-          disableInput: false
-        })
-      }
-    },
-
-    processUserInput(input, originalMessage) {
+    processUserInput(input) {
       // Show typing indicator
       this.isTyping = true
 
-      // Here you can integrate with external APIs, services, etc.
+      // Simulate API call or processing delay
       setTimeout(() => {
-        this.handleBotResponse(input, originalMessage)
+        this.handleBotResponse(input)
         this.isTyping = false
       }, 1500)
     },
 
-    handleBotResponse(userInput, originalMessage) {
-      // Handle different user inputs - this could call external APIs
+    handleBotResponse(userInput) {
+      // Handle different user inputs
       if (userInput.toLowerCase().includes('help') || userInput === 'get_help') {
         this.sendMainMenu()
       } else if (userInput === 'technical_support') {
@@ -184,12 +165,27 @@ export default {
       }
     },
 
-    // Separate methods for different bot responses
+    // Bot response methods with onClick functions in message data
     sendMainMenu() {
       this.addBotMessage({
         type: 'button',
         text: 'I can help you with several things. Please choose an option:',
         disableInput: true,
+        onClick: (option) => {
+          // Handle button click for this specific message
+          console.log('Main menu option selected:', option)
+          
+          // Add user's selection to chat
+          this.messages.push({
+            agent: 'user',
+            type: 'text',
+            text: option.text,
+            disableInput: false
+          })
+          
+          // Process the selection
+          this.processUserInput(option.value)
+        },
         options: [
           {
             text: '🔧 Technical Support',
@@ -220,6 +216,24 @@ export default {
         type: 'button',
         text: 'What kind of technical issue are you experiencing?',
         disableInput: true,
+        onClick: (option) => {
+          // Custom handling for technical support menu
+          console.log('Technical support option selected:', option)
+          
+          // Log analytics for technical issues
+          this.logAnalytics('technical_support_selection', option.value)
+          
+          // Add user's selection to chat
+          this.messages.push({
+            agent: 'user',
+            type: 'text',
+            text: option.text,
+            disableInput: false
+          })
+          
+          // Process the selection
+          this.processUserInput(option.value)
+        },
         options: [
           {
             text: '🚫 Login Problems',
@@ -252,26 +266,48 @@ export default {
         disableInput: false
       })
       
-      // Follow-up with options
+      // Follow up with priority selection
       setTimeout(() => {
         this.addBotMessage({
           type: 'button',
-          text: 'How would you like to proceed?',
+          text: 'How urgent is your billing issue?',
           disableInput: true,
+          onClick: (option) => {
+            // Custom handling for billing priority
+            console.log('Billing priority selected:', option)
+            
+            // Call external billing API with priority
+            this.callBillingAPI(option.value)
+            
+            // Add user's selection to chat
+            this.messages.push({
+              agent: 'user',
+              type: 'text',
+              text: option.text,
+              disableInput: false
+            })
+            
+            // Show confirmation message
+            this.addBotMessage({
+              type: 'text',
+              text: `Got it! I've escalated your ${option.value} priority billing issue to our specialist team.`,
+              disableInput: false
+            })
+          },
           options: [
             {
-              text: '📞 Schedule a Call',
-              value: 'schedule_call',
+              text: '🔴 High Priority',
+              value: 'high',
               action: 'postback'
             },
             {
-              text: '📧 Send Email',
-              value: 'send_email',
+              text: '🟡 Medium Priority',
+              value: 'medium',
               action: 'postback'
             },
             {
-              text: '💬 Continue Chat',
-              value: 'continue_chat',
+              text: '🟢 Low Priority',
+              value: 'low',
               action: 'postback'
             }
           ]
@@ -288,15 +324,14 @@ export default {
     },
 
     connectToHuman() {
-      // This could trigger an actual API call to your support system
       this.addBotMessage({
         type: 'text',
         text: 'I\'m connecting you with a human agent. Please wait a moment...',
         disableInput: true
       })
       
-      // Example: Call external API
-      // this.callSupportAPI('connect_human', { userId: this.currentUser.id })
+      // Call external API for human handoff
+      this.callSupportAPI('connect_human')
     },
 
     sendDefaultResponse() {
@@ -304,6 +339,16 @@ export default {
         type: 'button',
         text: 'I\'m not sure I understand. Here are some things I can help you with:',
         disableInput: true,
+        onClick: (option) => {
+          // Default fallback handling
+          this.messages.push({
+            agent: 'user',
+            type: 'text',
+            text: option.text,
+            disableInput: false
+          })
+          this.processUserInput(option.value)
+        },
         options: [
           {
             text: '❓ Get Help',
@@ -326,18 +371,37 @@ export default {
       })
     },
 
-    // Example external API integration
-    async callSupportAPI(action, data) {
+    // Example external API integrations
+    async callSupportAPI(action, data = {}) {
       try {
         const response = await fetch('/api/support', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action, data })
         })
-        const result = await response.json()
-        return result
+        return await response.json()
       } catch (error) {
         console.error('Support API error:', error)
+      }
+    },
+
+    async callBillingAPI(priority) {
+      try {
+        const response = await fetch('/api/billing/escalate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ priority, userId: this.currentUser?.id })
+        })
+        return await response.json()
+      } catch (error) {
+        console.error('Billing API error:', error)
+      }
+    },
+
+    logAnalytics(event, value) {
+      // Example analytics logging
+      if (window.gtag) {
+        window.gtag('event', event, { value })
       }
     }
   },
@@ -361,6 +425,7 @@ export default {
 | `input-disable` | Boolean | `false` | Disables message input when true |
 | `is-open` | Boolean | `false` | Opens the board on initialization when true |
 | `open-delay` | Number | `undefined` | Delay (ms) before opening. Requires `is-open: true` |
+| `:onButtonClick` | Function | - | Called when a button is clicked with the button option object |
 
 ## UI Customization Options
 

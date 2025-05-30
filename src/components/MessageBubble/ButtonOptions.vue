@@ -9,7 +9,7 @@
         class="qkb-mb-button-options__item"
       >
         <button
-          v-if="item.action === 'postback'"
+          v-if="isFunction"
           class="qkb-mb-button-options__btn"
           @click="selectOption(item)"
         >
@@ -29,8 +29,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import EventBus from '../../helpers/event-bus'
+import { ref, onMounted } from 'vue'
+const isFunction = ref(false)
+onMounted(() => {
+  isFunction.value = typeof props.mainData.onClick === 'function'
+})
 
 const props = defineProps({
   mainData: {
@@ -41,9 +44,11 @@ const props = defineProps({
 
 const selectedItem = ref(null)
 
-const selectOption = (value) => {
-  selectedItem.value = value
-  EventBus.emit('select-button-option', value)
+const selectOption = (option) => {
+  selectedItem.value = option.value
+  if (isFunction.value) {
+    props.mainData.onClick(option)
+  }
 }
 </script>
 

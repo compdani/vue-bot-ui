@@ -1,13 +1,16 @@
 <template>
-  <div class="qkb-bot-ui" :class="uiClasses" :style="windowStyles">
+  <div class="qkb-bot-ui" :class="uiClasses">
     <transition name="qkb-fadeUp">
-      <div class="qkb-board" v-if="botActive">
+      <div class="qkb-board" v-if="botActive" :style="windowStyles">
         <BoardHeader :bot-title="optionsMain.botTitle" @close-bot="botToggle">
           <template #header>
             <slot name="header"></slot>
           </template>
         </BoardHeader>
-        <BoardContent :bot-typing="botTyping" :main-data="messages">
+        <BoardContent 
+          :bot-typing="botTyping" 
+          :main-data="messages"
+        >
           <template #botTyping>
             <slot name="botTyping"></slot>
           </template>
@@ -55,8 +58,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import EventBus from '../helpers/event-bus'
+import { ref, computed, onMounted } from 'vue'
 import Config from '../config'
 import BoardHeader from './Board/Header.vue'
 import BoardContent from './Board/Content.vue'
@@ -110,7 +112,7 @@ const defaultOptions = {
   inputPlaceholder: 'Message',
   inputDisableBg: '#fff',
   inputDisablePlaceholder: null,
-  bubbleZIndex: 9999,
+  bubbleZIndex: 9998,
   bubblePosition: {
     bottom: '20px',
     right: '20px',
@@ -119,7 +121,7 @@ const defaultOptions = {
   },
   windowZIndex: 9999,
   windowPosition: {
-    bottom: '20px',
+    bottom: '80px',
     right: '20px',
     top: null,
     left: null
@@ -180,19 +182,13 @@ const botToggle = () => {
   botActive.value = !botActive.value
 
   if (botActive.value) {
-    EventBus.on('select-button-option', selectOption)
     emit('init')
   } else {
-    EventBus.off('select-button-option')
     emit('destroy')
   }
 }
 
 const sendMessage = (value) => {
-  emit('msg-send', value)
-}
-
-const selectOption = (value) => {
   emit('msg-send', value)
 }
 
@@ -209,10 +205,6 @@ onMounted(() => {
   document.addEventListener(Config.EVENT_CLOSE, botClose)
   document.addEventListener(Config.EVENT_TOGGLE, botToggle)
 })
-
-onBeforeUnmount(() => {
-  EventBus.off('select-button-option')
-})
 </script>
 
 <style scoped>
@@ -226,9 +218,7 @@ onBeforeUnmount(() => {
 }
 
 .qkb-board {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 20px);
+  position: fixed;
   width: 350px;
   height: 500px;
   background: #fff;
