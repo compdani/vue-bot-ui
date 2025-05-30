@@ -60,11 +60,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/JuzSer/vue-bot-ui.git"
+    "url": "https://github.com/comdani/vue3-bot-ui.git"
   },
   "bugs": {
-    "url": "https://github.com/JuzSer/vue-bot-ui/issues"
+    "url": "https://github.com/comdani/vue3-bot-ui/issues"
   },
-  "homepage": "https://github.com/JuzSer/vue-bot-ui#readme",
+  "homepage": "https://github.com/comdani/vue3-bot-ui#readme",
   "license": "MIT"
 }
