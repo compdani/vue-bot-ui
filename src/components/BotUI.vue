@@ -1,5 +1,5 @@
 <template>
-  <div class="qkb-bot-ui" :class="uiClasses">
+  <div class="qkb-bot-ui" :class="uiClasses" :style="windowStyles">
     <transition name="qkb-fadeUp">
       <div class="qkb-board" v-if="botActive">
         <BoardHeader :bot-title="optionsMain.botTitle" @close-bot="botToggle">
@@ -27,7 +27,7 @@
         </BoardAction>
       </div>
     </transition>
-    <div class="qkb-bot-bubble">
+    <div class="qkb-bot-bubble" :style="bubbleStyles">
       <button class="qkb-bubble-btn" @click="botToggle">
         <slot name="bubbleButton">
           <transition name="qkb-scaleUp">
@@ -109,7 +109,21 @@ const defaultOptions = {
   msgBubbleColorUser: '#fff',
   inputPlaceholder: 'Message',
   inputDisableBg: '#fff',
-  inputDisablePlaceholder: null
+  inputDisablePlaceholder: null,
+  bubbleZIndex: 9999,
+  bubblePosition: {
+    bottom: '20px',
+    right: '20px',
+    top: null,
+    left: null
+  },
+  windowZIndex: 9999,
+  windowPosition: {
+    bottom: '20px',
+    right: '20px',
+    top: null,
+    left: null
+  }
 }
 
 const optionsMain = computed(() => ({ ...defaultOptions, ...props.options }))
@@ -120,6 +134,34 @@ const uiClasses = computed(() => {
     classes.push('qkb-bot-ui--animate')
   }
   return classes
+})
+
+const windowStyles = computed(() => {
+  const styles = {
+    zIndex: optionsMain.value.windowZIndex
+  }
+
+  const position = optionsMain.value.windowPosition
+  if (position.bottom !== null) styles.bottom = position.bottom
+  if (position.right !== null) styles.right = position.right
+  if (position.top !== null) styles.top = position.top
+  if (position.left !== null) styles.left = position.left
+
+  return styles
+})
+
+const bubbleStyles = computed(() => {
+  const styles = {
+    zIndex: optionsMain.value.bubbleZIndex
+  }
+
+  const position = optionsMain.value.bubblePosition
+  if (position.bottom !== null) styles.bottom = position.bottom
+  if (position.right !== null) styles.right = position.right
+  if (position.top !== null) styles.top = position.top
+  if (position.left !== null) styles.left = position.left
+
+  return styles
 })
 
 const botOpen = () => {
@@ -176,9 +218,6 @@ onBeforeUnmount(() => {
 <style scoped>
 .qkb-bot-ui {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
-  z-index: 9999;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
@@ -201,7 +240,7 @@ onBeforeUnmount(() => {
 }
 
 .qkb-bot-bubble {
-  position: relative;
+  position: fixed;
 }
 
 .qkb-bubble-btn {

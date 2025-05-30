@@ -58,7 +58,21 @@ export default {
       botOptions: {
         botTitle: 'My Assistant',
         colorScheme: '#1b53d0',
-        textColor: '#ffffff'
+        textColor: '#ffffff',
+        bubbleZIndex: 10000,
+        bubblePosition: {
+          bottom: '30px',
+          right: '30px',
+          top: null,
+          left: null
+        },
+        windowZIndex: 9999,
+        windowPosition: {
+          bottom: '20px',
+          right: '20px',
+          top: null,
+          left: null
+        }
       }
     }
   },
@@ -71,6 +85,271 @@ export default {
 }
 </script>
 ```
+
+## Button Message Implementation Example
+
+Here's a complete example showing how to implement and handle button messages with external processing:
+
+```vue
+<template>
+  <VueBotUI
+    :messages="messages"
+    :options="botOptions"
+    :bot-typing="isTyping"
+    @msg-send="handleMessageSend"
+  />
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isTyping: false,
+      messages: [
+        {
+          agent: 'bot',
+          type: 'text',
+          text: 'Hello! Welcome to our support system. How can I help you today?',
+          disableInput: false
+        }
+      ],
+      botOptions: {
+        botTitle: 'Support Assistant',
+        colorScheme: '#2563eb',
+        textColor: '#ffffff'
+      }
+    }
+  },
+  methods: {
+    handleMessageSend(message) {
+      // Button selections and text messages are both emitted here
+      console.log('Message received:', message)
+      
+      // Extract the message content (works for both text input and button selection)
+      const messageText = message.text || message.value
+      
+      // Add user's action to chat history
+      this.addUserMessage(messageText, message)
+      
+      // Process the message/button selection externally
+      this.processUserInput(messageText, message)
+    },
+
+    addUserMessage(text, originalMessage) {
+      // For button selections, show what the user selected
+      if (originalMessage.text) {
+        // This is a text message from input
+        this.messages.push({
+          agent: 'user',
+          type: 'text',
+          text: text,
+          disableInput: false
+        })
+      } else if (originalMessage.value) {
+        // This is a button selection - show the button text that was clicked
+        this.messages.push({
+          agent: 'user',
+          type: 'text',
+          text: originalMessage.text, // The button's display text
+          disableInput: false
+        })
+      }
+    },
+
+    processUserInput(input, originalMessage) {
+      // Show typing indicator
+      this.isTyping = true
+
+      // Here you can integrate with external APIs, services, etc.
+      setTimeout(() => {
+        this.handleBotResponse(input, originalMessage)
+        this.isTyping = false
+      }, 1500)
+    },
+
+    handleBotResponse(userInput, originalMessage) {
+      // Handle different user inputs - this could call external APIs
+      if (userInput.toLowerCase().includes('help') || userInput === 'get_help') {
+        this.sendMainMenu()
+      } else if (userInput === 'technical_support') {
+        this.sendTechnicalSupportMenu()
+      } else if (userInput === 'billing_support') {
+        this.sendBillingSupport()
+      } else if (userInput === 'login_issue') {
+        this.sendLoginHelp()
+      } else if (userInput === 'human_support') {
+        this.connectToHuman()
+      } else {
+        this.sendDefaultResponse()
+      }
+    },
+
+    // Separate methods for different bot responses
+    sendMainMenu() {
+      this.addBotMessage({
+        type: 'button',
+        text: 'I can help you with several things. Please choose an option:',
+        disableInput: true,
+        options: [
+          {
+            text: '🔧 Technical Support',
+            value: 'technical_support',
+            action: 'postback'
+          },
+          {
+            text: '💳 Billing Questions',
+            value: 'billing_support',
+            action: 'postback'
+          },
+          {
+            text: '📖 User Guide',
+            value: 'https://example.com/guide',
+            action: 'url'
+          },
+          {
+            text: '👤 Talk to Human',
+            value: 'human_support',
+            action: 'postback'
+          }
+        ]
+      })
+    },
+
+    sendTechnicalSupportMenu() {
+      this.addBotMessage({
+        type: 'button',
+        text: 'What kind of technical issue are you experiencing?',
+        disableInput: true,
+        options: [
+          {
+            text: '🚫 Login Problems',
+            value: 'login_issue',
+            action: 'postback'
+          },
+          {
+            text: '🐛 Bug Report',
+            value: 'bug_report',
+            action: 'postback'
+          },
+          {
+            text: '⚡ Performance Issues',
+            value: 'performance_issue',
+            action: 'postback'
+          },
+          {
+            text: '⬅️ Back to Main Menu',
+            value: 'get_help',
+            action: 'postback'
+          }
+        ]
+      })
+    },
+
+    sendBillingSupport() {
+      this.addBotMessage({
+        type: 'text',
+        text: 'I understand you have billing questions. Let me connect you with our billing specialist.',
+        disableInput: false
+      })
+      
+      // Follow-up with options
+      setTimeout(() => {
+        this.addBotMessage({
+          type: 'button',
+          text: 'How would you like to proceed?',
+          disableInput: true,
+          options: [
+            {
+              text: '📞 Schedule a Call',
+              value: 'schedule_call',
+              action: 'postback'
+            },
+            {
+              text: '📧 Send Email',
+              value: 'send_email',
+              action: 'postback'
+            },
+            {
+              text: '💬 Continue Chat',
+              value: 'continue_chat',
+              action: 'postback'
+            }
+          ]
+        })
+      }, 1000)
+    },
+
+    sendLoginHelp() {
+      this.addBotMessage({
+        type: 'text',
+        text: 'I can help you with login issues. First, please try clearing your browser cache and cookies, then attempt to log in again.',
+        disableInput: false
+      })
+    },
+
+    connectToHuman() {
+      // This could trigger an actual API call to your support system
+      this.addBotMessage({
+        type: 'text',
+        text: 'I\'m connecting you with a human agent. Please wait a moment...',
+        disableInput: true
+      })
+      
+      // Example: Call external API
+      // this.callSupportAPI('connect_human', { userId: this.currentUser.id })
+    },
+
+    sendDefaultResponse() {
+      this.addBotMessage({
+        type: 'button',
+        text: 'I\'m not sure I understand. Here are some things I can help you with:',
+        disableInput: true,
+        options: [
+          {
+            text: '❓ Get Help',
+            value: 'get_help',
+            action: 'postback'
+          },
+          {
+            text: '📞 Contact Support',
+            value: 'human_support',
+            action: 'postback'
+          }
+        ]
+      })
+    },
+
+    addBotMessage(message) {
+      this.messages.push({
+        agent: 'bot',
+        ...message
+      })
+    },
+
+    // Example external API integration
+    async callSupportAPI(action, data) {
+      try {
+        const response = await fetch('/api/support', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action, data })
+        })
+        const result = await response.json()
+        return result
+      } catch (error) {
+        console.error('Support API error:', error)
+      }
+    }
+  },
+
+  mounted() {
+    // Initialize with main menu
+    setTimeout(() => {
+      this.sendMainMenu()
+    }, 2000)
+  }
+}
+</script>
 
 ## Component Props
 
@@ -102,6 +381,41 @@ export default {
 | `inputPlaceholder` | String | 'Message' | Input placeholder text |
 | `inputDisableBg` | String | '#fff' | Disabled input background |
 | `inputDisablePlaceholder` | String | null | Disabled input placeholder |
+| `bubbleZIndex` | Number | 9999 | Z-index for the chat bubble |
+| `bubblePosition` | Object | `{bottom: '20px', right: '20px', top: null, left: null}` | Position of the chat bubble |
+| `windowZIndex` | Number | 9999 | Z-index for the entire chat window |
+| `windowPosition` | Object | `{bottom: '20px', right: '20px', top: null, left: null}` | Position of the entire chat window |
+
+### Positioning Examples
+
+```javascript
+// Default bottom-right position
+bubblePosition: {
+  bottom: '20px',
+  right: '20px',
+  top: null,
+  left: null
+}
+
+// Top-left position for both window and bubble
+windowPosition: {
+  bottom: null,
+  right: null,
+  top: '20px',
+  left: '20px'
+}
+
+bubblePosition: {
+  bottom: null,
+  right: null,
+  top: '20px',
+  left: '20px'
+}
+
+// Custom z-index for layering
+windowZIndex: 10000,
+bubbleZIndex: 10001
+```
 
 ## Message Types
 

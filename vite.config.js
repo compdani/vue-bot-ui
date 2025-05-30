@@ -17,7 +17,12 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/vue-bot-ui.js'),
       name: 'VueBotUI',
-      fileName: (format) => `vue-bot-ui.${format}.js`
+      fileName: (format) => {
+        if (format === 'es') return 'vue-bot-ui.es.js'
+        if (format === 'umd') return 'vue-bot-ui.umd.js'
+        return `vue-bot-ui.${format}.js`
+      },
+      formats: ['es', 'umd']
     },
     rollupOptions: {
       external: ['vue'],
@@ -25,8 +30,12 @@ export default defineConfig({
         exports: 'named',
         globals: {
           vue: 'Vue'
+        },
+        assetFileNames: (assetInfo) => {
+          return assetInfo.name
         }
       }
-    }
+    },
+    cssCodeSplit: false
   }
 }) 
