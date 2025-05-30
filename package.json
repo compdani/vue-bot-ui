@@ -1,17 +1,29 @@
 {
-  "name": "vue3-bot-ui",
-  "version": "0.1.0",
+  "name": "@dreia/vue3-bot-ui",
+  "version": "0.1.0-beta.1",
   "description": "Chatbot UI using Vue.js 3",
   "author": {
-    "name": "SonNH",
-    "email": "sonnh@ownego.com"
+    "name": "Danilo Urrutia",
+    "email": "dani@dreia.com"
   },
-  "main": "dist/vue-bot-ui.common.js",
+  "main": "./dist/vue-bot-ui.umd.js",
+  "module": "./dist/vue-bot-ui.es.js",
+  "types": "./types/index.d.ts",
+  "type": "module",
   "files": [
-    "dist/*",
-    "src/*",
+    "dist/",
+    "types/",
     "package.json"
   ],
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./dist/vue-bot-ui.es.js",
+      "require": "./dist/vue-bot-ui.umd.js"
+    },
+    "./style.css": "./dist/vue-bot-ui.css",
+    "./types": "./types/index.d.ts"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -42,7 +54,8 @@
   },
   "dependencies": {
     "@npmcli/package-json": "^3.0.0",
-    "mitt": "^3.0.1"
+    "mitt": "^3.0.1",
+    "sanitize.css": "^13.0.0"
   },
   "repository": {
     "type": "git",
