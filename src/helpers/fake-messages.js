@@ -11,17 +11,23 @@ export const fakeMessages = [
       {
         'text': '🔍 Search Support Articles',
         'value': 'search',
-        'action': 'postback'
+        'onClick': () => {
+          console.log('search')
+        }
       },
       {
         'text': '🎫 Submit Support Ticket',
         'value': 'submit_ticket',
-        'action': 'postback'
+        'onClick': () => {
+          console.log('submit_ticket')
+        }
       },
       {
         'text': '💬 Test Multi-line Input',
         'value': 'test_input',
-        'action': 'postback'
+        'onClick': () => {
+          console.log('test_input')
+        }
       }
     ],
     'disableInput': true
@@ -48,7 +54,9 @@ export const fakeMessages = [
       {
         'text': '❌ Not what I\'m looking for',
         'value': 'result_not_match',
-        'action': 'postback'
+        'onClick': () => {
+          console.log('result_not_match')
+        }
       }
     ],
     'disableInput': true

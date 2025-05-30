@@ -11,7 +11,7 @@
         <button
           v-if="isFunction(item)"
           class="qkb-mb-button-options__btn"
-          @click="selectOption(item)"
+          @click="item.onClick(item.value)"
         >
           <span>{{ item.text }}</span>
         </button>
@@ -58,15 +58,6 @@ const props = defineProps({
 })
 
 const selectedItem = ref(null)
-
-const selectOption = (option) => {
-  selectedItem.value = option.value
-  if (isFunction(option)) {
-    option.onClick(option.value)
-    return
-  }
-  console.log("Error: option.onClick is not a function")
-}
 
 const isFunction = (option) => {
   if (typeof option === 'object' && option.onClick) {
