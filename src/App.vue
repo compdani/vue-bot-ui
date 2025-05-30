@@ -38,6 +38,7 @@
       :is-open="false"
       @init="botStart"
       @msg-send="msgSend"
+      @button-clicked="handleButtonClick"
     />
   </div>
 </template>
@@ -104,29 +105,28 @@ const getResponse = () => {
         ...response
       }
 
-      // Add onClick handler for button-type messages
-      if (response.type === 'button' && response.options) {
-        replyMessage.onClick = (option) => {
-          console.log('Button clicked:', option)
-          // Add user's selection to chat
-          messageData.value.push({
-            agent: 'user',
-            type: 'text',
-            text: option.text,
-            disableInput: false
-          })
-          
-          // Process the selection by getting another response
-          getResponse()
-        }
-      }
-
       inputDisable.value = response.disableInput
       messageData.value.push(replyMessage)
 
       // finish
       botTyping.value = false
     })
+}
+
+const handleButtonClick = (buttonData) => {
+  // Handle button click logic here
+  console.log('Button clicked:', buttonData)
+  
+  // Add user's selection to chat
+  messageData.value.push({
+    agent: 'user',
+    type: 'text',
+    text: buttonData.text,
+    disableInput: false
+  })
+  
+  // Process the selection by getting another response
+  getResponse()
 }
 </script>
 

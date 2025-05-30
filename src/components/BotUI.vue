@@ -71,13 +71,14 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import Config from '../config'
 import BoardHeader from './Board/Header.vue'
 import BoardContent from './Board/Content.vue'
 import BoardAction from './Board/Action.vue'
 import BubbleIcon from '../assets/icons/bubble.svg'
 import CloseIcon from '../assets/icons/close.svg'
+import EventBus from '../helpers/event-bus.js'
 
 const props = defineProps({
   options: {
@@ -104,7 +105,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['init', 'destroy', 'msg-send'])
+const emit = defineEmits(['init', 'destroy', 'msg-send', 'button-clicked'])
 
 const botActive = ref(false)
 
@@ -176,6 +177,11 @@ const sendMessage = (value) => {
   emit('msg-send', value)
 }
 
+// Handle button clicks from event bus
+const handleButtonClick = (buttonData) => {
+  emit('button-clicked', buttonData)
+}
+
 if (props.isOpen) {
   if (props.openDelay) {
     setTimeout(botOpen, props.openDelay)
@@ -188,6 +194,14 @@ onMounted(() => {
   document.addEventListener(Config.EVENT_OPEN, botOpen)
   document.addEventListener(Config.EVENT_CLOSE, botClose)
   document.addEventListener(Config.EVENT_TOGGLE, botToggle)
+  
+  // Listen for button clicks from event bus
+  EventBus.on('button-clicked', handleButtonClick)
+})
+
+onUnmounted(() => {
+  // Clean up event bus listener
+  EventBus.off('button-clicked', handleButtonClick)
 })
 </script>
 

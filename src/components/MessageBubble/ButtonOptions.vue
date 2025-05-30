@@ -9,9 +9,9 @@
         class="qkb-mb-button-options__item"
       >
         <button
-          v-if="isFunction(item)"
+          v-if="item.action !== 'url'"
           class="qkb-mb-button-options__btn"
-          @click="item.onClick(item.value)"
+          @click="handleButtonClick(item)"
         >
           <span>{{ item.text }}</span>
         </button>
@@ -30,6 +30,8 @@
 
 <script setup>
 import { ref } from 'vue'
+import EventBus from '../../helpers/event-bus.js'
+
 const props = defineProps({
   mainData: {
     type: Object,
@@ -59,6 +61,19 @@ const props = defineProps({
 
 const selectedItem = ref(null)
 
+const handleButtonClick = (item) => {
+  selectedItem.value = item.value
+  
+  // Emit event through the event bus to BotUI parent
+  EventBus.emit('button-clicked', {
+    action: item.action || 'click',
+    value: item.value,
+    text: item.text,
+    originalItem: item
+  })
+}
+
+// Keep the isFunction for backward compatibility but we don't use it anymore
 const isFunction = (option) => {
   if (typeof option === 'object' && option.onClick) {
     return true
