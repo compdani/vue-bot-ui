@@ -475,6 +475,16 @@ bubbleZIndex: 10001
 }
 ```
 
+### Markdown Message
+```javascript
+{
+  agent: 'bot',
+  type: 'mrkdwn',
+  text: '# Hello!\n\nThis is **bold** and *italic* text.\n\n- List item 1\n- List item 2\n\n[Link](https://example.com)',
+  disableInput: false
+}
+```
+
 ### Button Options
 ```javascript
 {

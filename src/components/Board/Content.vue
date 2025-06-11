@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, onMounted } from 'vue'
 import MessageBubbleMain from '../MessageBubble/Main.vue'
 import MessageTyping from '../MessageBubble/Typing.vue'
 
@@ -73,15 +73,38 @@ const props = defineProps({
 const boardContent = ref(null)
 const boardBubbles = ref(null)
 
-const updateScroll = () => {
+const scrollToBottom = (behavior = 'smooth') => {
+  if (!boardContent.value || !boardBubbles.value) return
+  
   const contentElm = boardContent.value
   const offsetHeight = boardBubbles.value.offsetHeight
-  contentElm.scrollTop = offsetHeight
+  
+  contentElm.scrollTo({
+    top: offsetHeight,
+    behavior
+  })
 }
 
+// Watch for new messages
 watch(() => props.mainData, () => {
   nextTick(() => {
-    updateScroll()
+    scrollToBottom()
+  })
+}, { deep: true })
+
+// Watch for typing indicator
+watch(() => props.botTyping, (newValue) => {
+  if (newValue) {
+    nextTick(() => {
+      scrollToBottom()
+    })
+  }
+})
+
+// Initial scroll on mount
+onMounted(() => {
+  nextTick(() => {
+    scrollToBottom('auto') // Use 'auto' for initial scroll to avoid animation
   })
 })
 </script>
@@ -92,6 +115,7 @@ watch(() => props.mainData, () => {
   overflow-y: auto;
   padding: 20px;
   background-color: v-bind('boardContentBg');
+  scroll-behavior: smooth;
 }
 
 .qkb-board-content__bubbles {

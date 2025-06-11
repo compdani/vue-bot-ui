@@ -73,8 +73,8 @@ const botStart = () => {
     botTyping.value = false
     messageData.value.push({
       agent: 'bot',
-      type: 'text',
-      text: 'Hello! 👋\n\nWelcome to the Vue Bot UI demo!\n\nTry the new input features:\n• Press Enter to send\n• Press Ctrl+Enter (or Cmd+Enter on Mac) to add line breaks\n• The input will auto-resize for longer messages'
+      type: 'mrkdwn',
+      text: '# Welcome to Vue Bot UI! 👋\n\nThis demo showcases the new **markdown** support with features like:\n\n- *Italic* and **bold** text\n- [Links](https://example.com)\n- `Code snippets`\n- Lists and more!\n\nTry the new input features:\n• Press Enter to send\n• Press Ctrl+Enter (or Cmd+Enter on Mac) to add line breaks\n• The input will auto-resize for longer messages'
     })
   }, 1000)
 }

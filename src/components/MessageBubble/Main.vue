@@ -23,6 +23,7 @@
 import { computed } from 'vue'
 import SingleText from './SingleText.vue'
 import ButtonOptions from './ButtonOptions.vue'
+import MarkdownMessage from './MarkdownMessage.vue'
 
 const props = defineProps({
   message: {
@@ -65,6 +66,8 @@ const componentType = computed(() => {
   switch (props.message.type) {
     case 'button':
       return ButtonOptions
+    case 'mrkdwn':
+      return MarkdownMessage
     default:
       return SingleText
   }
