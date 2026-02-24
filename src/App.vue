@@ -60,7 +60,8 @@ const botOptions = {
   inputPlaceholder: 'Type your message... (Enter to send, Ctrl+Enter for new line)',
   inputDisableBg: '#fff',
   inputDisablePlaceholder: 'Bot is typing, please wait...',
-  inputDisableButtonPlaceholder: 'Please select one of the options above'
+  inputDisableButtonPlaceholder: 'Please select one of the options above',
+  enableAttachments: true
 }
 
 const botStart = () => {

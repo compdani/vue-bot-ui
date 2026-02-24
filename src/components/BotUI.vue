@@ -35,6 +35,8 @@
           :input-disable-bg="optionsMain.inputDisableBg"
           :msg-bubble-bg-user="optionsMain.msgBubbleBgUser"
           :last-message-type="lastMessageType"
+          :enable-attachments="optionsMain.enableAttachments"
+          :window-position="optionsMain.windowPosition"
           @msg-send="sendMessage"
         >
           <template #actions>
@@ -128,6 +130,7 @@ const defaultOptions = {
   inputDisableBg: '#fff',
   inputDisablePlaceholder: 'Please wait for bot response',
   inputDisableButtonPlaceholder: null,
+  enableAttachments: false,
   bubbleZIndex: 9998,
   bubblePosition: {
     bottom: '20px',
@@ -223,7 +226,7 @@ onUnmounted(() => {
 }
 
 .qkb-bot-ui--animate .qkb-board {
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .qkb-board {
@@ -232,7 +235,7 @@ onUnmounted(() => {
   height: 500px;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -241,6 +244,7 @@ onUnmounted(() => {
   right: v-bind('optionsMain.windowPosition.right || "auto"');
   top: v-bind('optionsMain.windowPosition.top || "auto"');
   left: v-bind('optionsMain.windowPosition.left || "auto"');
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .qkb-bot-bubble {
@@ -261,45 +265,58 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
   background: v-bind('optionsMain.colorScheme');
-  box-shadow: 0 2px 10px rgba(26, 75, 255, 0.3);
+  box-shadow: 0 6px 20px rgba(26, 75, 255, 0.35), 0 2px 6px rgba(26, 75, 255, 0.2);
 }
 
 .qkb-bubble-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 3px 15px rgba(26, 75, 255, 0.4);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 28px rgba(26, 75, 255, 0.45), 0 4px 10px rgba(26, 75, 255, 0.25);
+}
+
+.qkb-bubble-btn:active {
+  transform: translateY(-1px) scale(1.02);
 }
 
 .qkb-bubble-btn-icon {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   fill: v-bind('optionsMain.textColor');
+  transition: transform 0.2s ease;
 }
 
 .qkb-bubble-btn-icon--close {
-  transform: rotate(45deg);
+  transform: rotate(0deg);
 }
 
 /* Transitions */
-.qkb-fadeUp-enter-active,
-.qkb-fadeUp-leave-active {
-  transition: opacity 0.3s, transform 0.3s;
+.qkb-fadeUp-enter-active {
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.qkb-fadeUp-enter-from,
+.qkb-fadeUp-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.qkb-fadeUp-enter-from {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
 .qkb-fadeUp-leave-to {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(10px) scale(0.98);
 }
 
 .qkb-scaleUp-enter-active,
 .qkb-scaleUp-leave-active {
-  transition: transform 0.2s;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
 }
 
 .qkb-scaleUp-enter-from,
 .qkb-scaleUp-leave-to {
-  transform: scale(0);
+  transform: scale(0) rotate(-45deg);
+  opacity: 0;
 }
 </style>

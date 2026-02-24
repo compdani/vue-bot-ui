@@ -77,9 +77,21 @@ const componentType = computed(() => {
 <style scoped>
 .qkb-msg-bubble {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   max-width: 85%;
   margin: 4px 0;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .qkb-msg-bubble--bot {
@@ -97,23 +109,25 @@ const componentType = computed(() => {
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
-  background: #f0f4ff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.25);
 }
 
 .qkb-msg-avatar__img {
-  width: 24px;
-  height: 24px;
+  width: 100%;
+  height: 100%;
   background-size: cover;
   background-position: center;
   background-image: v-bind('"url(" + botAvatarImg + ")"');
 }
 
 .qkb-msg-bubble__time {
-  font-size: 12px;
-  color: #999;
+  font-size: 11px;
+  color: #95a5a6;
   margin-top: 4px;
+  font-weight: 500;
 }
 </style>

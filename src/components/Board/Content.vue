@@ -118,9 +118,27 @@ onMounted(() => {
   scroll-behavior: smooth;
 }
 
+/* Custom scrollbar */
+.qkb-board-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.qkb-board-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.qkb-board-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+
+.qkb-board-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
 .qkb-board-content__bubbles {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 </style>

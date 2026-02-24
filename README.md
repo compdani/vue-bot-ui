@@ -427,6 +427,7 @@ This behavior matches modern chat applications and allows for both single-line q
 | `inputDisableBg` | String | '#fff' | Disabled input background |
 | `inputDisablePlaceholder` | String | 'Please wait for bot response' | Disabled input placeholder (general) |
 | `inputDisableButtonPlaceholder` | String | 'Please select an option above' | Disabled input placeholder for button messages |
+| `enableAttachments` | Boolean | false | Enable file/image attachment functionality |
 | `bubbleZIndex` | Number | 9999 | Z-index for the chat bubble |
 | `bubblePosition` | Object | `{bottom: '20px', right: '20px', top: null, left: null}` | Position of the chat bubble |
 | `windowZIndex` | Number | 9999 | Z-index for the entire chat window |
@@ -601,6 +602,199 @@ The `button-clicked` event provides the following data structure:
 - `botui-open`: Opens the board
 - `botui-close`: Closes the board
 - `botui-toggle`: Toggles board state
+
+## File Attachments
+
+Vue Bot UI supports file and image attachments. When enabled, users can attach files in three ways:
+- Click the paperclip button and select files
+- Paste images directly from clipboard (Ctrl/Cmd + V)
+- Drag and drop files (coming soon)
+
+### Enabling Attachments
+
+Set `enableAttachments: true` in your options:
+
+```javascript
+const botOptions = {
+  botTitle: 'My Assistant',
+  colorScheme: '#1b53d0',
+  enableAttachments: true, // Enable file attachments
+  // ... other options
+}
+```
+
+### Supported File Types
+
+- **Images**: All image formats (jpg, png, gif, webp, etc.)
+- **Documents**: PDF, DOC, DOCX, TXT, CSV, XLSX, XLS
+
+### Handling Attachments in Messages
+
+When a user sends a message with attachments, the `msg-send` event will include an `attachments` array:
+
+```javascript
+methods: {
+  handleMessageSend(message) {
+    console.log('Message:', message.text)
+    
+    if (message.attachments && message.attachments.length > 0) {
+      message.attachments.forEach(attachment => {
+        if (attachment.type === 'input_image') {
+          // Handle image attachment
+          console.log('Image URL:', attachment.image_url) // Base64 data URL
+        } else if (attachment.type === 'input_file') {
+          // Handle file attachment
+          console.log('Filename:', attachment.filename)
+          console.log('File data:', attachment.file_data) // Base64 data URL
+        }
+      })
+    }
+    
+    // Send to your backend/API
+    this.sendToAPI(message)
+  }
+}
+```
+
+### Attachment Data Structure
+
+**Image Attachment:**
+```typescript
+{
+  type: 'input_image',
+  image_url: 'data:image/png;base64,iVBORw0KG...' // Base64 encoded
+}
+```
+
+**File Attachment:**
+```typescript
+{
+  type: 'input_file',
+  filename: 'document.pdf',
+  file_data: 'data:application/pdf;base64,JVBERi0x...' // Base64 encoded
+}
+```
+
+### Displaying Attachments in Messages
+
+Attachments are automatically displayed in message bubbles when included in the message data:
+
+- **Images**: Displayed as clickable previews (max 300px height). Click to open full size in new tab.
+- **Files**: Displayed with a file icon and filename in a styled container.
+
+To show attachments in a bot response, include them in the message object:
+
+```javascript
+messageData.value.push({
+  agent: 'bot',
+  type: 'text',
+  text: 'Here is the image you requested:',
+  attachments: [
+    {
+      type: 'input_image',
+      image_url: 'data:image/png;base64,...'
+    }
+  ]
+})
+```
+
+**Note**: Both user and bot messages support attachment display. The styling automatically adapts to the message sender (user/bot) with appropriate colors and backgrounds.
+
+### Complete Example with Attachments
+
+```vue
+<template>
+  <VueBotUI
+    :messages="messages"
+    :options="botOptions"
+    :bot-typing="botTyping"
+    :input-disable="inputDisable"
+    @msg-send="handleMessageSend"
+  />
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      messages: [],
+      botTyping: false,
+      inputDisable: false,
+      botOptions: {
+        botTitle: 'Assistant Bot',
+        colorScheme: '#008B8B',
+        enableAttachments: true, // Enable attachments
+        inputPlaceholder: 'Type or paste an image...'
+      }
+    }
+  },
+  methods: {
+    async handleMessageSend(message) {
+      // Add user message to chat
+      this.messages.push({
+        agent: 'user',
+        type: 'text',
+        text: message.text
+      })
+      
+      this.botTyping = true
+      
+      // Process attachments if any
+      const attachments = message.attachments || []
+      
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: message.text,
+            attachments: attachments
+          })
+        })
+        
+        const data = await response.json()
+        
+        // Add bot response
+        this.messages.push({
+          agent: 'bot',
+          type: 'text',
+          text: data.response
+        })
+      } catch (error) {
+        console.error('Error:', error)
+      } finally {
+        this.botTyping = false
+      }
+    }
+  }
+}
+</script>
+```
+
+### TypeScript Support
+
+Full TypeScript definitions are included:
+
+```typescript
+import type { 
+  ChatAttachment, 
+  Message, 
+  BotUIOptions 
+} from '@dreia/vue3-bot-ui'
+
+interface MessageWithAttachments extends Message {
+  attachments?: ChatAttachment[]
+}
+
+const handleMessage = (message: MessageWithAttachments) => {
+  // Fully typed attachment handling
+  message.attachments?.forEach(att => {
+    if (att.type === 'input_image') {
+      console.log(att.image_url)
+    }
+  })
+}
+```
 
 ## Available Slots
 
