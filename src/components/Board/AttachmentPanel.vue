@@ -72,6 +72,10 @@ defineProps({
       top: null,
       left: null
     })
+  },
+  windowZIndex: {
+    type: Number,
+    default: 9999
   }
 })
 
@@ -87,7 +91,7 @@ defineEmits(['add-files', 'remove-attachment'])
   padding: 12px;
   min-width: 260px;
   max-width: 320px;
-  z-index: 100;
+  z-index: v-bind('windowZIndex + 1');
   bottom: 100%;
   right: 0;
   margin-bottom: 8px;

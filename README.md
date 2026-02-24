@@ -464,6 +464,26 @@ windowZIndex: 10000,
 bubbleZIndex: 10001
 ```
 
+### Z-Index Stacking
+
+All popup elements (attachment panel, etc.) automatically use the `windowZIndex` value to maintain proper stacking order. When you customize the z-index values, all related elements will respect this hierarchy:
+
+- **bubbleZIndex**: Main chat bubble button
+- **windowZIndex**: Chat window and all contained elements (input area, messages, attachment panel)
+- **Attachment Panel**: Automatically uses `windowZIndex + 1` for proper layering
+
+**Example with custom z-index:**
+```javascript
+botOptions: {
+  bubbleZIndex: 1005,
+  windowZIndex: 1006,
+  // Attachment panel will use z-index: 1007
+  // All popups will be properly stacked
+}
+```
+
+This ensures that if you have other elements with different z-index values on your page, the bot UI won't have stacking conflicts.
+
 ## Message Types
 
 ### Text Message

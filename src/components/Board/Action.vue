@@ -16,6 +16,7 @@
       :attachments="pendingAttachments"
       :color-scheme="msgBubbleBgUser"
       :window-position="windowPosition"
+      :window-z-index="windowZIndex"
       @add-files="triggerFileInput"
       @remove-attachment="removeAttachment"
     />
@@ -113,6 +114,10 @@ const props = defineProps({
       top: null,
       left: null
     })
+  },
+  windowZIndex: {
+    type: Number,
+    default: 9999
   }
 })
 

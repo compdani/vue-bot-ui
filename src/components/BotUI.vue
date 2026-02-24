@@ -37,6 +37,7 @@
           :last-message-type="lastMessageType"
           :enable-attachments="optionsMain.enableAttachments"
           :window-position="optionsMain.windowPosition"
+          :window-z-index="optionsMain.windowZIndex"
           @msg-send="sendMessage"
         >
           <template #actions>
