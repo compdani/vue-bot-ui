@@ -299,6 +299,11 @@ watch(messageText, () => {
 </script>
 
 <style scoped>
+.qkb-board-action-container {
+  position: relative;
+  overflow: visible;
+}
+
 .qkb-board-action {
   padding: 16px 20px 18px;
   border-top: 1px solid #e8eaed;

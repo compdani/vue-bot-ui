@@ -3716,8 +3716,8 @@ const Ar = { render: Er }, Fr = {
   emits: ["msg-send"],
   setup(u, { emit: e }) {
     $((p) => ({
-      v6fe4c6f4: u.msgBubbleBgUser,
-      v5fe6f64c: u.inputDisableBg
+      d64a058e: u.msgBubbleBgUser,
+      v79de6367: u.inputDisableBg
     }));
     const t = u, n = e, r = Z(null), c = Z(null), o = Z([]), i = Z(!1), a = Z(null);
     function s() {
@@ -3861,7 +3861,7 @@ const Ar = { render: Er }, Fr = {
       ], 2)
     ]));
   }
-}, Zr = /* @__PURE__ */ O(jr, [["__scopeId", "data-v-a33fadf1"]]), Hr = {
+}, Zr = /* @__PURE__ */ O(jr, [["__scopeId", "data-v-139abdac"]]), Hr = {
   xmlns: "http://www.w3.org/2000/svg",
   width: "511pt",
   height: "511pt",
