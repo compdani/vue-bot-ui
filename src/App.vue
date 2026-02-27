@@ -1,46 +1,91 @@
 <template>
-  <div id="app">
-    <img
-      alt="Vue Bot UI"
-      src="./assets/logo.png"
-    />
-    
-    <div class="demo-instructions">
-      <h2>Vue Bot UI Demo</h2>
-      <div class="features">
-        <h3>✨ New Features</h3>
-        <div class="feature-list">
-          <div class="feature">
-            <strong>Multi-line Messages:</strong> The input now supports multiple lines with auto-resize
-          </div>
-          <div class="feature">
-            <strong>Enter Key:</strong> Press <kbd>Enter</kbd> to send your message
-          </div>
-          <div class="feature">
-            <strong>New Line:</strong> Press <kbd>Ctrl+Enter</kbd> (Windows/Linux) or <kbd>Cmd+Enter</kbd> (Mac) to add a new line
-          </div>
-          <div class="feature">
-            <strong>Auto-resize:</strong> The textarea automatically grows as you type longer messages
-          </div>
-        </div>
+  <v-app>
+    <v-container class="py-8">
+      <div class="text-center mb-8">
+        <img
+          alt="Vue Bot UI"
+          src="./assets/logo.png"
+          style="max-width: 200px;"
+        />
       </div>
       
-      <div class="try-it">
-        <p>💬 <strong>Try it out:</strong> Click the chat bubble to open the bot and test the new input behaviors!</p>
-      </div>
-    </div>
+      <v-card elevation="4" class="mb-8" color="blue-lighten-5">
+        <v-card-title class="text-h4 text-primary">
+          Vue Bot UI Demo
+        </v-card-title>
+        
+        <v-card-text>
+          <v-card class="mb-4" elevation="2">
+            <v-card-title class="text-h6 d-flex align-center">
+              <v-icon icon="mdi-sparkles" class="mr-2" color="amber"></v-icon>
+              New Features
+            </v-card-title>
+            <v-card-text>
+              <v-list density="compact">
+                <v-list-item>
+                  <v-list-item-title class="font-weight-bold mb-1">
+                    Multi-line Messages
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    The input now supports multiple lines with auto-resize
+                  </v-list-item-subtitle>
+                </v-list-item>
+                
+                <v-list-item>
+                  <v-list-item-title class="font-weight-bold mb-1">
+                    Enter Key
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    Press <v-chip size="x-small" color="grey-lighten-2">Enter</v-chip> to send your message
+                  </v-list-item-subtitle>
+                </v-list-item>
+                
+                <v-list-item>
+                  <v-list-item-title class="font-weight-bold mb-1">
+                    New Line
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    Press <v-chip size="x-small" color="grey-lighten-2">Ctrl+Enter</v-chip> (Windows/Linux) or 
+                    <v-chip size="x-small" color="grey-lighten-2" class="ml-1">Cmd+Enter</v-chip> (Mac) to add a new line
+                  </v-list-item-subtitle>
+                </v-list-item>
+                
+                <v-list-item>
+                  <v-list-item-title class="font-weight-bold mb-1">
+                    Auto-resize
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    The textarea automatically grows as you type longer messages
+                  </v-list-item-subtitle>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
+          </v-card>
+          
+          <v-alert
+            type="info"
+            variant="tonal"
+            icon="mdi-chat"
+            prominent
+          >
+            <v-alert-title class="text-h6">Try it out!</v-alert-title>
+            Click the chat bubble to open the bot and test the new input behaviors!
+          </v-alert>
+        </v-card-text>
+      </v-card>
 
-    <VueBotUI
-      :options="botOptions"
-      :messages="messageData"
-      :bot-typing="botTyping"
-      :input-disable="inputDisable"
-      :is-open="false"
-      @init="botStart"
-      @msg-send="msgSend"
-      @button-clicked="handleButtonClick"
-    />
-  </div>
+      <VueBotUI
+        :options="botOptions"
+        :messages="messageData"
+        :bot-typing="botTyping"
+        :input-disable="inputDisable"
+        :is-open="false"
+        @init="botStart"
+        @msg-send="msgSend"
+        @button-clicked="handleButtonClick"
+      />
+    </v-container>
+  </v-app>
 </template>
 
 <script setup>
@@ -133,77 +178,5 @@ const handleButtonClick = (buttonData) => {
 </script>
 
 <style scoped>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 60px;
-  padding: 20px;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.demo-instructions {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 40px;
-  border-left: 4px solid #1a4bff;
-}
-
-.demo-instructions h2 {
-  margin-top: 0;
-  color: #1a4bff;
-  font-size: 2em;
-}
-
-.demo-instructions h3 {
-  color: #333;
-  margin-bottom: 16px;
-  font-size: 1.2em;
-}
-
-.feature-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.feature {
-  background: white;
-  padding: 12px 16px;
-  border-radius: 8px;
-  border-left: 3px solid #e9ecef;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.feature strong {
-  color: #1a4bff;
-}
-
-kbd {
-  background: #f1f3f4;
-  border: 1px solid #dadce0;
-  border-radius: 4px;
-  color: #3c4043;
-  font-family: monospace;
-  font-size: 0.875em;
-  padding: 2px 6px;
-}
-
-.try-it {
-  margin-top: 20px;
-  padding: 16px;
-  background: linear-gradient(135deg, #1a4bff, #0035e0);
-  color: white;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.try-it p {
-  margin: 0;
-  font-size: 1.1em;
-}
+/* No custom styles needed - using Vuetify */
 </style>

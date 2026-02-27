@@ -53,28 +53,37 @@
       </div>
     </transition>
     <div class="qkb-bot-bubble">
-      <button class="qkb-bubble-btn" @click="botToggle">
-        <slot name="bubbleButton">
+      <slot name="bubbleButton">
+        <v-btn
+          @click="botToggle"
+          :color="optionsMain.colorScheme"
+          :size="optionsMain.bubbleBtnSize"
+          icon
+          elevation="6"
+          class="qkb-bubble-btn"
+        >
           <transition name="qkb-scaleUp">
-            <svg 
+            <v-icon 
               v-if="!botActive" 
-              key="1" 
-              class="qkb-bubble-btn-icon"
-              viewBox="0 0 24 24"
+              key="1"
+              size="large"
             >
-              <path :d="mdiCommentMultiple" fill="currentColor" />
-            </svg>
-            <svg 
+              <svg viewBox="0 0 24 24">
+                <path :d="mdiCommentMultiple" fill="currentColor" />
+              </svg>
+            </v-icon>
+            <v-icon 
               v-else 
-              key="2" 
-              class="qkb-bubble-btn-icon qkb-bubble-btn-icon--close"
-              viewBox="0 0 24 24"
+              key="2"
+              size="large"
             >
-              <path :d="mdiClose" fill="currentColor" />
-            </svg>
+              <svg viewBox="0 0 24 24">
+                <path :d="mdiClose" fill="currentColor" />
+              </svg>
+            </v-icon>
           </transition>
-        </slot>
-      </button>
+        </v-btn>
+      </slot>
     </div>
     <div class="qkb-preload-image">
       <div v-if="optionsMain.botAvatarImg" class="qkb-msg-avatar__img"></div>
@@ -283,37 +292,21 @@ onUnmounted(() => {
 }
 
 .qkb-bubble-btn {
-  width: v-bind('optionsMain.bubbleBtnSize + "px"');
-  height: v-bind('optionsMain.bubbleBtnSize + "px"');
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
-  background: v-bind('optionsMain.colorScheme');
-  box-shadow: 0 6px 20px rgba(26, 75, 255, 0.35), 0 2px 6px rgba(26, 75, 255, 0.2);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .qkb-bubble-btn:hover {
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 28px rgba(26, 75, 255, 0.45), 0 4px 10px rgba(26, 75, 255, 0.25);
 }
 
 .qkb-bubble-btn:active {
   transform: translateY(-1px) scale(1.02);
 }
 
-.qkb-bubble-btn-icon {
+.qkb-bubble-btn svg {
   width: 26px;
   height: 26px;
-  fill: v-bind('optionsMain.textColor');
-  transition: transform 0.2s ease;
-}
-
-.qkb-bubble-btn-icon--close {
-  transform: rotate(0deg);
+  fill: currentColor;
 }
 
 /* Transitions */

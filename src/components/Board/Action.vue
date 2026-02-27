@@ -35,45 +35,44 @@
         <div class="qkb-board-action__extra">
           <slot name="actions"></slot>
           <!-- Formatting toolbar toggle -->
-          <button
-            type="button"
+          <v-btn
             @click="showToolbar = !showToolbar"
-            class="qkb-action-item qkb-action-item--format"
-            :class="{ 'qkb-action-item--active': showToolbar }"
+            :icon="mdiFormatText"
+            variant="text"
+            :color="showToolbar ? msgBubbleBgUser : 'grey-darken-1'"
+            density="comfortable"
+            size="small"
             :title="showToolbar ? 'Hide formatting toolbar' : 'Show formatting toolbar (keyboard shortcuts still work)'"
-          >
-            <svg class="qkb-action-icon" viewBox="0 0 24 24">
-              <path :d="mdiFormatText" fill="currentColor" />
-            </svg>
-          </button>
+          ></v-btn>
           <!-- Attachment button integrated in input area -->
-          <button
+          <v-badge
             v-if="enableAttachments"
-            type="button"
-            @click="toggleAttachPanel"
-            class="qkb-action-item qkb-action-item--attach"
-            :class="{ 'qkb-action-item--attach-active': pendingAttachments.length > 0 }"
-            :title="pendingAttachments.length > 0 ? `${pendingAttachments.length} attachment(s) – click to manage` : 'Attach files or images'"
+            :content="pendingAttachments.length"
+            :model-value="pendingAttachments.length > 0"
+            color="error"
+            overlap
           >
-            <svg class="qkb-action-icon" viewBox="0 0 24 24">
-              <path :d="mdiPaperclip" fill="currentColor" />
-            </svg>
-            <span
-              v-if="pendingAttachments.length > 0"
-              class="qkb-attach-badge"
-            >{{ pendingAttachments.length }}</span>
-          </button>
-          <button 
-            class="qkb-action-item qkb-action-item--send" 
-            @click="sendMessage"
-            :disabled="!messageText || inputDisable"
-          >
-            <slot name="sendButton">
-              <svg class="qkb-action-icon qkb-action-icon--send" viewBox="0 0 24 24">
-                <path :d="mdiSend" fill="currentColor" />
-              </svg>
-            </slot>
-          </button>
+            <v-btn
+              @click="toggleAttachPanel"
+              :icon="mdiPaperclip"
+              variant="text"
+              :color="pendingAttachments.length > 0 ? msgBubbleBgUser : 'grey-darken-1'"
+              density="comfortable"
+              size="small"
+              :title="pendingAttachments.length > 0 ? `${pendingAttachments.length} attachment(s) – click to manage` : 'Attach files or images'"
+            ></v-btn>
+          </v-badge>
+          <slot name="sendButton">
+            <v-btn 
+              @click="sendMessage"
+              :disabled="!messageText || inputDisable"
+              :icon="mdiSend"
+              :color="msgBubbleBgUser"
+              variant="flat"
+              size="small"
+              elevation="2"
+            ></v-btn>
+          </slot>
         </div>
       </div>
     </div>
@@ -356,90 +355,5 @@ const handleKeydown = (event) => {
   padding: 8px 12px;
   background: #fafbfc;
   border-top: 1px solid #f0f0f0;
-}
-
-.qkb-action-item {
-  background: none;
-  border: none;
-  padding: 9px;
-  cursor: pointer;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-.qkb-action-item:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.qkb-action-item--attach {
-  color: #5a6c7d;
-}
-
-.qkb-action-item--attach:hover {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-.qkb-action-item--attach-active {
-  color: v-bind('msgBubbleBgUser');
-  background: rgba(67, 86, 224, 0.1);
-}
-
-.qkb-action-item--format {
-  color: #5a6c7d;
-}
-
-.qkb-action-item--format:hover {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-.qkb-action-item--format.qkb-action-item--active {
-  color: v-bind('msgBubbleBgUser');
-  background: rgba(67, 86, 224, 0.1);
-}
-
-.qkb-action-item--send {
-  background: v-bind('msgBubbleBgUser');
-  color: white;
-  box-shadow: 0 2px 6px rgba(67, 86, 224, 0.25);
-}
-
-.qkb-action-item--send:not(:disabled):hover {
-  background: #2d3fd3;
-  transform: translateY(-1px) scale(1.05);
-  box-shadow: 0 4px 10px rgba(67, 86, 224, 0.35);
-}
-
-.qkb-action-item--send:not(:disabled):active {
-  transform: translateY(0) scale(1);
-}
-
-.qkb-action-icon {
-  width: 20px;
-  height: 20px;
-  fill: currentColor;
-}
-
-.qkb-attach-badge {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-  color: #fff;
-  border-radius: 50%;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 3px;
-  font-size: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  box-shadow: 0 1px 3px rgba(231, 76, 60, 0.4);
-  border: 1.5px solid #fff;
 }
 </style>
