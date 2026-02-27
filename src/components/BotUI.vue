@@ -1,12 +1,15 @@
 <template>
   <div class="qkb-bot-ui" :class="uiClasses">
     <transition name="qkb-fadeUp">
-      <div class="qkb-board" v-if="botActive">
+      <div class="qkb-board" v-if="botActive" :class="{ 'qkb-board--expanded': isExpanded }">
         <BoardHeader 
           :bot-title="optionsMain.botTitle" 
           :color-scheme="optionsMain.colorScheme"
           :text-color="optionsMain.textColor"
+          :expandable="optionsMain.expandable"
+          :is-expanded="isExpanded"
           @close-bot="botToggle"
+          @toggle-expand="isExpanded = !isExpanded"
         >
           <template #header>
             <slot name="header"></slot>
@@ -53,18 +56,22 @@
       <button class="qkb-bubble-btn" @click="botToggle">
         <slot name="bubbleButton">
           <transition name="qkb-scaleUp">
-            <component 
-              :is="BubbleIcon" 
+            <svg 
               v-if="!botActive" 
               key="1" 
-              class="qkb-bubble-btn-icon" 
-            />
-            <component 
-              :is="CloseIcon" 
+              class="qkb-bubble-btn-icon"
+              viewBox="0 0 24 24"
+            >
+              <path :d="mdiCommentMultiple" fill="currentColor" />
+            </svg>
+            <svg 
               v-else 
               key="2" 
-              class="qkb-bubble-btn-icon qkb-bubble-btn-icon--close" 
-            />
+              class="qkb-bubble-btn-icon qkb-bubble-btn-icon--close"
+              viewBox="0 0 24 24"
+            >
+              <path :d="mdiClose" fill="currentColor" />
+            </svg>
           </transition>
         </slot>
       </button>
@@ -81,8 +88,7 @@ import Config from '../config'
 import BoardHeader from './Board/Header.vue'
 import BoardContent from './Board/Content.vue'
 import BoardAction from './Board/Action.vue'
-import BubbleIcon from '../assets/icons/bubble.svg'
-import CloseIcon from '../assets/icons/close.svg'
+import { mdiCommentMultiple, mdiClose } from '@mdi/js'
 import EventBus from '../helpers/event-bus.js'
 
 const props = defineProps({
@@ -113,6 +119,7 @@ const props = defineProps({
 const emit = defineEmits(['init', 'destroy', 'msg-send', 'button-clicked'])
 
 const botActive = ref(false)
+const isExpanded = ref(false)
 
 const defaultOptions = {
   botTitle: 'Chatbot',
@@ -132,6 +139,7 @@ const defaultOptions = {
   inputDisablePlaceholder: 'Please wait for bot response',
   inputDisableButtonPlaceholder: null,
   enableAttachments: false,
+  expandable: true,
   bubbleZIndex: 9998,
   bubblePosition: {
     bottom: '20px',
@@ -185,6 +193,7 @@ const botToggle = () => {
     emit('init')
   } else {
     emit('destroy')
+    isExpanded.value = false
   }
 }
 
@@ -246,6 +255,22 @@ onUnmounted(() => {
   top: v-bind('optionsMain.windowPosition.top || "auto"');
   left: v-bind('optionsMain.windowPosition.left || "auto"');
   border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.qkb-board--expanded {
+  position: fixed;
+  width: 90vw;
+  height: 90vh;
+  max-width: 1200px;
+  max-height: 800px;
+  top: 50%;
+  left: 50%;
+  bottom: auto;
+  right: auto;
+  transform: translate(-50%, -50%);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .qkb-bot-bubble {

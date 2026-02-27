@@ -53,6 +53,7 @@ export interface BotUIOptions {
   inputDisablePlaceholder?: string
   inputDisableButtonPlaceholder?: string | null
   enableAttachments?: boolean
+  expandable?: boolean
   bubbleZIndex?: number
   bubblePosition?: Position
   windowZIndex?: number

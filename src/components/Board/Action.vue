@@ -24,19 +24,28 @@
     <div class="qkb-board-action" :class="actionClass">
       <div class="qkb-board-action__wrapper">
         <div class="qkb-board-action__msg-box">
-          <textarea
-            ref="qkbMessageInput"
+          <RichTextEditor
+            ref="editorRef"
             v-model="messageText"
-            class="qkb-board-action__input"
-            :disabled="inputDisable"
             :placeholder="placeholderText"
-            @keydown="handleKeydown"
-            @input="resizeTextarea"
-            rows="1"
-          ></textarea>
+            :disabled="inputDisable"
+            :show-toolbar="showToolbar"
+          />
         </div>
         <div class="qkb-board-action__extra">
           <slot name="actions"></slot>
+          <!-- Formatting toolbar toggle -->
+          <button
+            type="button"
+            @click="showToolbar = !showToolbar"
+            class="qkb-action-item qkb-action-item--format"
+            :class="{ 'qkb-action-item--active': showToolbar }"
+            :title="showToolbar ? 'Hide formatting toolbar' : 'Show formatting toolbar (keyboard shortcuts still work)'"
+          >
+            <svg class="qkb-action-icon" viewBox="0 0 24 24">
+              <path :d="mdiFormatText" fill="currentColor" />
+            </svg>
+          </button>
           <!-- Attachment button integrated in input area -->
           <button
             v-if="enableAttachments"
@@ -46,7 +55,9 @@
             :class="{ 'qkb-action-item--attach-active': pendingAttachments.length > 0 }"
             :title="pendingAttachments.length > 0 ? `${pendingAttachments.length} attachment(s) – click to manage` : 'Attach files or images'"
           >
-            <component :is="IconPaperclip" class="qkb-action-icon" />
+            <svg class="qkb-action-icon" viewBox="0 0 24 24">
+              <path :d="mdiPaperclip" fill="currentColor" />
+            </svg>
             <span
               v-if="pendingAttachments.length > 0"
               class="qkb-attach-badge"
@@ -58,7 +69,9 @@
             :disabled="!messageText || inputDisable"
           >
             <slot name="sendButton">
-              <component :is="IconSend" class="qkb-action-icon qkb-action-icon--send" />
+              <svg class="qkb-action-icon qkb-action-icon--send" viewBox="0 0 24 24">
+                <path :d="mdiSend" fill="currentColor" />
+              </svg>
             </slot>
           </button>
         </div>
@@ -69,9 +82,9 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
-import IconSend from '../../assets/icons/send.svg'
-import IconPaperclip from '../../assets/icons/paperclip.svg'
+import { mdiPaperclip, mdiSend, mdiFormatText } from '@mdi/js'
 import AttachmentPanel from './AttachmentPanel.vue'
+import RichTextEditor from './RichTextEditor.vue'
 
 const props = defineProps({
   inputPlaceholder: {
@@ -123,8 +136,9 @@ const props = defineProps({
 
 const emit = defineEmits(['msg-send'])
 
-const messageText = ref(null)
-const qkbMessageInput = ref(null)
+const messageText = ref('')
+const editorRef = ref(null)
+const showToolbar = ref(false)
 
 // ── Attachment state ──────────────────────────────────────────────────────────
 const pendingAttachments = ref([])
@@ -232,9 +246,12 @@ const placeholderText = computed(() => {
 
 onMounted(() => {
   if (!props.inputDisable) {
-    qkbMessageInput.value?.focus()
+    nextTick(() => {
+      if (editorRef.value) {
+        editorRef.value.focus()
+      }
+    })
   }
-  resizeTextarea()
   
   // Add paste event listener if attachments are enabled
   if (props.enableAttachments) {
@@ -252,7 +269,7 @@ const sendMessage = () => {
   if (messageText.value && !props.inputDisable) {
     const message = { 
       text: messageText.value,
-      type: 'text'
+      type: 'mrkdwn' // Always send as markdown since rich text is converted to markdown
     }
     
     // Include attachments if any
@@ -263,11 +280,18 @@ const sendMessage = () => {
     emit('msg-send', message)
     
     // Clear message and attachments
-    messageText.value = null
+    messageText.value = ''
+    if (editorRef.value) {
+      editorRef.value.clear()
+    }
     pendingAttachments.value = []
     showAttachPanel.value = false
     
-    qkbMessageInput.value?.focus()
+    nextTick(() => {
+      if (editorRef.value) {
+        editorRef.value.focus()
+      }
+    })
   }
 }
 
@@ -283,19 +307,6 @@ const handleKeydown = (event) => {
     }
   }
 }
-
-const resizeTextarea = () => {
-  if (qkbMessageInput.value) {
-    qkbMessageInput.value.style.height = 'auto'
-    qkbMessageInput.value.style.height = qkbMessageInput.value.scrollHeight + 'px'
-  }
-}
-
-watch(messageText, () => {
-  nextTick(() => {
-    resizeTextarea()
-  })
-})
 </script>
 
 <style scoped>
@@ -312,60 +323,39 @@ watch(messageText, () => {
 
 .qkb-board-action__wrapper {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
   background: #fff;
-  border-radius: 24px;
-  padding: 4px 4px 4px 16px;
+  border-radius: 12px;
   border: 1.5px solid #e0e7ee;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
 }
 
 .qkb-board-action__wrapper:focus-within {
   border-color: v-bind('msgBubbleBgUser');
-  box-shadow: 0 0 0 3px rgba(67, 86, 224, 0.1);
+  box-shadow: 0 0 0 3px rgba(67, 86, 224, 0.08);
 }
 
 .qkb-board-action--disabled .qkb-board-action__wrapper {
   background-color: v-bind('inputDisableBg');
   border-color: #e8eaed;
+  opacity: 0.7;
 }
 
 .qkb-board-action__msg-box {
   flex: 1;
   position: relative;
-}
-
-.qkb-board-action__input {
-  width: 100%;
-  padding: 8px 0;
-  border: none;
-  border-radius: 20px;
-  outline: none;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #2c3e50;
-  background: transparent;
-  resize: none;
-  font-family: inherit;
-  min-height: 22px;
-  max-height: 120px;
-  overflow-y: auto;
-}
-
-.qkb-board-action__input::placeholder {
-  color: #95a5a6;
-}
-
-.qkb-board-action--disabled .qkb-board-action__input {
-  cursor: not-allowed;
-  color: #95a5a6;
+  min-width: 0;
 }
 
 .qkb-board-action__extra {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 6px;
+  padding: 8px 12px;
+  background: #fafbfc;
+  border-top: 1px solid #f0f0f0;
 }
 
 .qkb-action-item {
@@ -395,6 +385,19 @@ watch(messageText, () => {
 }
 
 .qkb-action-item--attach-active {
+  color: v-bind('msgBubbleBgUser');
+  background: rgba(67, 86, 224, 0.1);
+}
+
+.qkb-action-item--format {
+  color: #5a6c7d;
+}
+
+.qkb-action-item--format:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.qkb-action-item--format.qkb-action-item--active {
   color: v-bind('msgBubbleBgUser');
   background: rgba(67, 86, 224, 0.1);
 }

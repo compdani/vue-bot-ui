@@ -1,12 +1,10 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import svgLoader from 'vite-svg-loader'
 import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [
-    vue(),
-    svgLoader()
+    vue()
   ],
   resolve: {
     alias: {
@@ -25,11 +23,12 @@ export default defineConfig({
       formats: ['es', 'umd']
     },
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue', 'vuetify'],
       output: {
         exports: 'named',
         globals: {
-          vue: 'Vue'
+          vue: 'Vue',
+          vuetify: 'Vuetify'
         },
         assetFileNames: (assetInfo) => {
           return assetInfo.name
